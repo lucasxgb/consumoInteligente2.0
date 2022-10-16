@@ -1,0 +1,37 @@
+[
+     {
+          "Matricula": 84449,
+          "Consumo": 0.08,
+          "Vazao": 4,
+          "Data": "2022-09-28 21:47",
+          "Bloqueado": 0,
+          "ConsumoAtual": 0,
+          "consumoAtual": 0.19999999999999998
+     },
+     {
+          "Matricula": 84449,
+          "Consumo": 0.16,
+          "Vazao": 4,
+          "Data": "2022-09-28 21:48",
+          "Bloqueado": 0,
+          "ConsumoAtual": 0,
+          "consumoAtual": 0.19999999999999998
+     },
+     {
+          "Matricula": 84449,
+          "Consumo": 0.36,
+          "Vazao": 4,
+          "Data": "2022-09-28 21:48",
+          "Bloqueado": 0,
+          "ConsumoAtual": 0,
+          "consumoAtual": 0.19999999999999998
+     },
+     {
+          "Matricula": 84449,
+          "Consumo": 0.64,
+          "Vazao": 4,
+          "Data": "2022-09-28 21:48",
+          "Bloqueado": 0,
+          "ConsumoAtual": 0
+     }
+]

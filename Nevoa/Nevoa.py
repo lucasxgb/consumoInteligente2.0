@@ -1,0 +1,1 @@
+''' Se inscreve no tópico e manda para o servidor principal '''
