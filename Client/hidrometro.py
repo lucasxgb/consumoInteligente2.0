@@ -180,7 +180,7 @@ class Hidrometro:
         print('Log: ', buf)
 
     ######## Verifica conexão ################
-    def verifcaConexao(self, cliente, dadosUsuario, flags, rc):
+    def verificaConexao(self, cliente, dadosUsuario, flags, rc):
         if rc == 0:
             print('Conectado, código de retorno= ', rc)
         else:
@@ -192,17 +192,21 @@ class Hidrometro:
     def inicia(self, matriculaHidrometro, dados):
         broker = 'broker.hivemq.com'
         client = mqtt.Client(matriculaHidrometro)
+        client.on_connect = self.verificaConexao #metodo do mqtt responsavel por verificar se estabeleceu a conexão ou não
         client.connect(broker)
         print('Conectado no servidor')
         client.loop_start()
-        print('Se inscrevendo no tópico')
-        client.subscribe('enviarDados/Hidrometros', qos=0)
+        #se inscreve em névoa hidrometros no topico exclusivo dele
+        print('Se inscrevendo nos tópicos')
+        client.subscribe('nevoa/Hidrometros', )
+        client.subscribe(f'nevoa/Hidrometros/{matriculaHidrometro}')
         print('Publicando no tópico')
-        client.publish('enviarDados/Hidrometros', dados)
-        client.on_message = self.retorno  # inserindo a função de retorno
-        client.on_log = self.retornoLog  # retorno do log das mensagens
-        time.sleep(4)
-        client.loop_stop()
+        while True:
+            client.publish('nevoa/Hidrometros', dados, qos=1)  #qos =1 é pra garantir que a pessoa vai receber a mensagem
+            client.publish(f'nevoa/Hidrometros/{matriculaHidrometro}', dados, qos=1)  #qos =1 é pra garantir que a pessoa vai receber a mensagem
+            client.on_message = self.retorno  # inserindo a função de retorno
+            #client.on_log = self.retornoLog  # retorno do log das mensagens
+
 
 
 
