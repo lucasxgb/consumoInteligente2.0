@@ -202,6 +202,7 @@ class Hidrometro:
         client.subscribe(f'nevoa/Hidrometros/{matriculaHidrometro}')
         print('Publicando no tópico')
         while True:
+            sleep(10)
             client.publish('nevoa/Hidrometros', dados, qos=1)  #qos =1 é pra garantir que a pessoa vai receber a mensagem
             client.publish(f'nevoa/Hidrometros/{matriculaHidrometro}', dados, qos=1)  #qos =1 é pra garantir que a pessoa vai receber a mensagem
             client.on_message = self.retorno  # inserindo a função de retorno

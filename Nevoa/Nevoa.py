@@ -1,4 +1,6 @@
 ''' Se inscreve no tópico e manda para o servidor principal '''
+import random
+
 import paho.mqtt.client as mqtt
 import time
 import json
@@ -6,13 +8,16 @@ import json
 
 listaMensagem = [] #mensagens que recebo entram na lista
 class Conexao():
+
+    #exibe as mensagens que chegam
     def retrn(self, cliente, dadosUsuario, mensagem):
         mensagemDecode = str(mensagem.payload.decode('utf-8'))
         print("Mensagem recebida", mensagemDecode)
         print('Tópico da Mensagem', mensagem.topic)
+
+    #insere as mensagens que chegam na lista
     def retorno(self, cliente, dadosUsuario, mensagem):
         mensagemDecode = str(mensagem.payload.decode('utf-8'))
-
         listaMensagem.append(json.loads(mensagemDecode))
 
     ########### Log - Registro do cliente #################
@@ -34,13 +39,13 @@ class Conexao():
     def inicia(self):
         c = True
         broker = 'broker.hivemq.com'
-        client = mqtt.Client('nevoa')
+        client = mqtt.Client('nevoa', random.randint(1,1000))
         client.on_connect = self.verificaConexao #metodo do mqtt responsavel por verificar se estabeleceu a conexão ou não
         client.connect(broker)
         print('Conectado no servidor')
-        client.loop_start()
+        client.loop_start() #para ver o retorno das chamadas
         print('Se inscrevendo no tópico')
-        while c ==True:
+        while c == True:
             client.subscribe('nevoa/Hidrometros')
             client.on_message = self.retorno  # inserindo a função de retorno
             #client.on_log = self.retornoLog  # retorno do log das mensagens
