@@ -205,7 +205,7 @@ class Hidrometro:
             sleep(10)
             client.publish('nevoa/Hidrometros', dados, qos=1)  #qos =1 é pra garantir que a pessoa vai receber a mensagem
             client.publish(f'nevoa/Hidrometros/{matriculaHidrometro}', dados, qos=1)  #qos =1 é pra garantir que a pessoa vai receber a mensagem
-            client.on_message = self.retorno  # inserindo a função de retorno
+            client.on_message = self.retorno  # exibindo o retorno da função
             #client.on_log = self.retornoLog  # retorno do log das mensagens
 
 
