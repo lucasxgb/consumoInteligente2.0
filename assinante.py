@@ -1,5 +1,6 @@
 ''' Se inscreve no tópico e manda para o servidor principal '''
-import random, time, json
+import random, json
+from time import sleep
 import paho.mqtt.client as mqtt
 import threading
 
@@ -14,7 +15,10 @@ class Conexao():
     # insere as mensagens que chegam na lista
     def retorno(self, cliente, dadosUsuario, mensagem):
         mensagemDecode = str(mensagem.payload.decode('utf-8'))
-        listaMensagem.append(json.loads(mensagemDecode))
+        if mensagem.topic == 'nevoa/Hidrometros': #se a mensagem chegar no tópico de hidrometros, ele guarda a informação no banco
+            listaMensagem.append(json.loads(mensagemDecode))
+        #else:  se não ele tem que verificar se a mensagem que chega é pra bloquear ou não
+
 
     # Log - Registro do cliente
     def retornoLog(self, cliente, dadosUsuario, nivel, buf):
@@ -47,6 +51,27 @@ class Conexao():
             BancoAberto = json.load(banco)
         return BancoAberto
 
+    # função retorna banco simplificado
+    def bancoSimplificado(self, banco):
+        listaComTodosHidrometro = []
+        for objeto in banco:
+            consumo = 0
+            vazao = 0
+            data = ''
+            bloqueado = 0
+            hidrometroMatricula = objeto['Matricula']
+            for hidrometro in banco:  # pra todos os hidrometros no banco  ele vai adicionando o valor pra mostrar uma redução de todos que tem no banco e retornar o json disso
+                if hidrometro['Matricula'] == hidrometroMatricula:
+                    consumo += hidrometro['Consumo']
+                    vazao = hidrometro['Vazao']
+                    data = hidrometro['Data']
+                    bloqueado = hidrometro['Bloqueado']
+            HidroPreenchido = {"Matricula": hidrometroMatricula, "Consumo": round(consumo, 2), "Vazao": vazao,
+                               "Data": data, 'Bloqueado': bloqueado}
+            if HidroPreenchido not in listaComTodosHidrometro:
+                listaComTodosHidrometro.append(HidroPreenchido)
+        return listaComTodosHidrometro
+
     # Inserindo os dados no banco de dados
     def insereBanco(self):
         listaHidro = []
@@ -69,28 +94,35 @@ class Conexao():
         print('Se inscrevendo no tópico')
         c = True
         while c == True:
-            client.subscribe('nevoa/Hidrometros')
-            client.on_message = self.retorno  # inserindo a função de retorno
+            client.subscribe('nevoa/Hidrometros', 1)
+            client.on_message = self.retorno# inserindo a função de retorno
             self.insereBanco()
+            sleep(10)
+            banco = self.abrirBanco("Nevoa/BancoNevoa/bancoNevoa.json")
+            listaHidro = self.bancoSimplificado(banco)
+            for hidrometro in listaHidro:
+                client.subscribe(f"nevoa/Hidrometros/{hidrometro['Matricula']}", 2)
 
-    # Função para pegar os hidrometros no banco e conectar o cliente ao topico de cada hidrometro
-    def hidroExpecifico(self):
-        client = self.inicia()
-        #client.loop_start()  # para observar o retorno das chamadas
-        print('Se inscrevendo no tópico')
-        banco = self.abrirBanco("Nevoa/BancoNevoa/bancoNevoa.json")
-        while True:
-            for hidrometro in banco:
-                client.subscribe(f"nevoa/Hidrometros/{hidrometro['Matricula']}")
-                client.on_message = self.retrn  # inserindo a função de retorno
 
-            # client.on_log = self.retornoLog  # retorno do log das mensagens
+
+
+    # # Função para pegar os hidrometros no banco e conectar o cliente ao topico de cada hidrometro
+    # def hidroExpecifico(self):
+    #     client = self.inicia()
+    #     #client.loop_start()  # para observar o retorno das chamadas
+    #     print('Se inscrevendo no tópico')
+    #
+    #     while True:
+    #         for hidrometro in banco:
+    #
+    #
+    #         # client.on_log = self.retornoLog  # retorno do log das mensagens
 
 
 nova = Conexao()
 threading.Thread(target=nova.inscrevendoTopico).start()
-while True:
-    nova.hidroExpecifico()
+#while True:
+#    nova.hidroExpecifico()
 
 # def menu():
 #     print('''\nPor favor, selecione uma das opcções:
