@@ -189,9 +189,9 @@ class Hidrometro:
     ###### metodo para publicar no tópico #######
     #def publica(self, urlTopico, dadosEnviar):
     #   return urlTopico, dadosEnviar
-    def inicia(self, matriculaHidrometro, dados):
+    def inicia(self):
         broker = 'broker.hivemq.com'
-        client = mqtt.Client(matriculaHidrometro)
+        client = mqtt.Client(str(self.getMatricula()))
         client.on_connect = self.verificaConexao #metodo do mqtt responsavel por verificar se estabeleceu a conexão ou não
         client.connect(broker)
         print('Conectado no servidor')
@@ -199,12 +199,12 @@ class Hidrometro:
         #se inscreve em névoa hidrometros no topico exclusivo dele
         print('Se inscrevendo nos tópicos')
         client.subscribe('nevoa/Hidrometros', )
-        client.subscribe(f'nevoa/Hidrometros/{matriculaHidrometro}')
+        client.subscribe(f'nevoa/Hidrometros/{self.getMatricula()}')
         print('Publicando no tópico')
         while True:
             sleep(10)
-            client.publish('nevoa/Hidrometros', dados, qos=1)  #qos =1 é pra garantir que a pessoa vai receber a mensagem
-            client.publish(f'nevoa/Hidrometros/{matriculaHidrometro}', dados, qos=1)  #qos =1 é pra garantir que a pessoa vai receber a mensagem
+            client.publish('nevoa/Hidrometros', self.getDados(), qos=1)  #qos =1 é pra garantir que a pessoa vai receber a mensagem
+            client.publish(f'nevoa/Hidrometros/{self.getMatricula()}', self.getDados(), qos=1)  #qos =1 é pra garantir que a pessoa vai receber a mensagem
             client.on_message = self.retorno  # exibindo o retorno da função
             #client.on_log = self.retornoLog  # retorno do log das mensagens
 
@@ -242,7 +242,8 @@ def Menu():
     # Hidro.main(Hidro.getMatricula())
     # Hidro.exibeHidrometro(Hidro.getDados())
     # opt = Hidro.exibeMenu()
-    Hidro.inicia(str(Hidro.getMatricula()), Hidro.getDados())
+    threading.Thread(target=Hidro.inicia).start()
+    #Hidro.inicia(str(Hidro.getMatricula()), Hidro.getDados())
 
 
 Menu()

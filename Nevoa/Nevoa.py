@@ -4,10 +4,16 @@ from time import sleep
 import paho.mqtt.client as mqtt
 import threading
 
-listaMensagem = []  # mensagens que recebo entram na lista
+listaMensagem = []
 class Conexao():
-     # insere as mensagens que chegam na lista
     def retorno(self, cliente, dadosUsuario, mensagem):
+        """ Função para tratar as mensagens que chega ao tópico que está escrito
+
+            Caso a mensagem venha no tópico geral de hidrômetros ela será convertida em dict e enviada para o banco.
+
+            Caso seja uma mensagem especifica, ocorre o tratamento de dados
+
+         """
         mensagemDecode = str(mensagem.payload.decode('utf-8'))
         if mensagem.topic == 'nevoa/Hidrometros': #se a mensagem chegar no tópico de hidrometros, ele guarda a informação no banco
             listaMensagem.append(json.loads(mensagemDecode))
@@ -19,18 +25,21 @@ class Conexao():
     def retornoLog(self, cliente, dadosUsuario, nivel, buf):
         print('Log: ', buf)
 
-    # Verifica conexão
+
     def verificaConexao(self, cliente, dadosUsuario, flags, rc):
+        """ Função para verificar o status da conexão
+
+            Caso Rc == 0 Conexão bem sucessida
+            Rc != 0 Algum tipo de erro, vai depender da numeração de retorno
+
+         """
         if rc == 0:
             print('Conectado, código de retorno= ', rc)
         else:
             print('Não foi possível se conectar, código= ', rc)
 
-    # metodo para publicar no tópico
-    # def publica(self, urlTopico, dadosEnviar):
-    #   return urlTopico, dadosEnviar
-
     def inicia(self):
+        """ Função para iniciar a conexão entre tópicos mqtt """
         broker = 'broker.hivemq.com'
         client = mqtt.Client('nevoa', random.randint(1, 1000))
         client.on_connect = self.verificaConexao  # metodo do mqtt responsavel por verificar se estabeleceu a conexão
@@ -39,15 +48,19 @@ class Conexao():
         print('Conectado no servidor')
         return client
 
-    # Abre o banco
     def abrirBanco(self, arquivo):
+        """ Função para abrir o banco de dados
+
+            arquivo é o caminho onde o banco se encontra
+
+        """
         BancoAberto = []
         with open(arquivo) as banco:
             BancoAberto = json.load(banco)
         return BancoAberto
 
-    # função retorna banco simplificado
     def bancoSimplificado(self, banco):
+        """ Função que retorna o dado de um hidrômetro de maneira geral, com o consumo completo e etc... """
         listaComTodosHidrometro = []
         for objeto in banco:
             consumo = 0
@@ -67,8 +80,8 @@ class Conexao():
                 listaComTodosHidrometro.append(HidroPreenchido)
         return listaComTodosHidrometro
 
-    # Inserindo os dados no banco de dados
     def insereBanco(self):
+        """ Função responsável por inserir os dados que chegam do hidrômetro no banco de dados """
         listaHidro = []
         with open("BancoNevoa/bancoNevoa.json") as banco:
             listaHidro = json.load(banco)
@@ -82,8 +95,9 @@ class Conexao():
                       separators=(',', ': ')
                       )
 
-    # se inscrevendo nos tópicos
+
     def inscrevendoTopico(self):
+        """ Função responsável por inscrever a névoa no tópico do hidrômetro utilizando mqtt """
         client = self.inicia()
         client.loop_start()  # para ver o retorno das chamadas
         print('Se inscrevendo no tópico')
@@ -99,26 +113,23 @@ class Conexao():
                 client.subscribe(f"nevoa/Hidrometros/{hidrometro['Matricula']}", 2)
 
 
+    def calculaMedia(self):
+        """ Função para realizar o cálculo da média dos hidrometros conectados a esta névoa
+
+            Precisa definir um tempo para recalcular a media sempre """
+        abrirBanco = self.abrirBanco("BancoNevoa/bancoNevoa.json")
+        banco = self.bancoSimplificado(abrirBanco)
+        mediaAtual = 0
+        somaConsumo = 0
+        quantidadeConsumo = 0
+        for hidrometro in banco:
+            somaConsumo += float(hidrometro['Consumo'])
+            quantidadeConsumo +=1
+        mediaAtual = (somaConsumo/quantidadeConsumo)
+        return mediaAtual
 
 nova = Conexao()
 threading.Thread(target=nova.inscrevendoTopico).start()
-#while True:
-#    nova.hidroExpecifico()
+while True:
+    nova.calculaMedia()
 
-# def menu():
-#     print('''\nPor favor, selecione uma das opcções:
-#        [1] - Alterar Vazão
-#        [2] - Ver Dados
-#        [0] - Encerrar Hidrômetro''')
-#     opt = int(input('\n'))
-#     return opt
-#
-# def menuAux():
-#     nova.inicia()
-#     opt = menu()
-#     if opt == 1:
-#         mat = input('insira matricula:') #matricula vem do adm no caso
-#
-#         nova.conectaHidroexpecifico(mat)
-
-# menuAux()

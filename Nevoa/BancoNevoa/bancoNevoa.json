@@ -1,3 +1,58 @@
 [
-     
+     {
+          "Matricula": 29100,
+          "Consumo": 0,
+          "Vazao": 0,
+          "Data": "2022-10-27 14:27",
+          "Bloqueado": 0
+     },
+     {
+          "Matricula": 17607,
+          "Consumo": 0,
+          "Vazao": 0,
+          "Data": "2022-10-27 14:28",
+          "Bloqueado": 0
+     },
+     {
+          "Matricula": 17607,
+          "Consumo": 0,
+          "Vazao": 0,
+          "Data": "2022-10-27 14:28",
+          "Bloqueado": 0
+     },
+     {
+          "Matricula": 17607,
+          "Consumo": 0,
+          "Vazao": 0,
+          "Data": "2022-10-27 14:28",
+          "Bloqueado": 0
+     },
+     {
+          "Matricula": 17607,
+          "Consumo": 0,
+          "Vazao": 0,
+          "Data": "2022-10-27 14:28",
+          "Bloqueado": 0
+     },
+     {
+          "Matricula": 99770,
+          "Consumo": 0.12,
+          "Vazao": 6,
+          "Data": "2022-10-27 14:28",
+          "Bloqueado": 0
+     },
+     {
+          "Matricula": 99770,
+          "Consumo": 0.24,
+          "Vazao": 6,
+          "Data": "2022-10-27 14:29",
+          "Bloqueado": 0
+     },
+     {
+          "Matricula": 99770,
+          "Consumo": 0.36,
+          "Vazao": 6,
+          "Data": "2022-10-27 14:29",
+          "Bloqueado": 0
+     }
 ]
