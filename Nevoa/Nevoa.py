@@ -6,19 +6,14 @@ import threading
 
 listaMensagem = []  # mensagens que recebo entram na lista
 class Conexao():
-    # exibe as mensagens que chegam
-    def retrn(self, cliente, dadosUsuario, mensagem):
-        mensagemDecode = str(mensagem.payload.decode('utf-8'))
-        print("Mensagem recebida", mensagemDecode)
-        print('Tópico da Mensagem', mensagem.topic)
-
-    # insere as mensagens que chegam na lista
+     # insere as mensagens que chegam na lista
     def retorno(self, cliente, dadosUsuario, mensagem):
         mensagemDecode = str(mensagem.payload.decode('utf-8'))
         if mensagem.topic == 'nevoa/Hidrometros': #se a mensagem chegar no tópico de hidrometros, ele guarda a informação no banco
             listaMensagem.append(json.loads(mensagemDecode))
-        #else:  se não ele tem que verificar se a mensagem que chega é pra bloquear ou não
-
+        else:  #se não ele tem que verificar se a mensagem que chega é pra bloquear ou não
+            print("Mensagem recebida", mensagemDecode)
+            print('Tópico da Mensagem', mensagem.topic)
 
     # Log - Registro do cliente
     def retornoLog(self, cliente, dadosUsuario, nivel, buf):
@@ -75,13 +70,13 @@ class Conexao():
     # Inserindo os dados no banco de dados
     def insereBanco(self):
         listaHidro = []
-        with open("Nevoa/BancoNevoa/bancoNevoa.json") as banco:
+        with open("BancoNevoa/bancoNevoa.json") as banco:
             listaHidro = json.load(banco)
         if listaMensagem:
             for hidrometro in listaMensagem:
                 listaHidro.append(dict(hidrometro))
                 listaMensagem.remove(hidrometro)
-        with open("Nevoa/BancoNevoa/bancoNevoa.json", 'w') as arquivoBanco:
+        with open("BancoNevoa/bancoNevoa.json", 'w') as arquivoBanco:
             json.dump(listaHidro, arquivoBanco,
                       indent=5,
                       separators=(',', ': ')
@@ -98,25 +93,11 @@ class Conexao():
             client.on_message = self.retorno# inserindo a função de retorno
             self.insereBanco()
             sleep(10)
-            banco = self.abrirBanco("Nevoa/BancoNevoa/bancoNevoa.json")
+            banco = self.abrirBanco("BancoNevoa/bancoNevoa.json")
             listaHidro = self.bancoSimplificado(banco)
             for hidrometro in listaHidro:
                 client.subscribe(f"nevoa/Hidrometros/{hidrometro['Matricula']}", 2)
 
-
-
-
-    # # Função para pegar os hidrometros no banco e conectar o cliente ao topico de cada hidrometro
-    # def hidroExpecifico(self):
-    #     client = self.inicia()
-    #     #client.loop_start()  # para observar o retorno das chamadas
-    #     print('Se inscrevendo no tópico')
-    #
-    #     while True:
-    #         for hidrometro in banco:
-    #
-    #
-    #         # client.on_log = self.retornoLog  # retorno do log das mensagens
 
 
 nova = Conexao()
