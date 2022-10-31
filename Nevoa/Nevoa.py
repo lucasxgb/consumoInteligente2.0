@@ -95,7 +95,6 @@ class Conexao():
                       separators=(',', ': ')
                       )
 
-
     def inscrevendoTopico(self):
         """ Função responsável por inscrever a névoa no tópico do hidrômetro utilizando mqtt """
         client = self.inicia()
@@ -128,6 +127,27 @@ class Conexao():
         mediaAtual = (somaConsumo/quantidadeConsumo)
         return mediaAtual
 
+    def hidrometroEspecifico(self, matriculaBuscar):
+        ''' Função responsável por retornar um hidrômetro especifico e mais atualizado '''
+        listaHidrometro = []
+        abrirBanco = self.abrirBanco("BancoNevoa/bancoNevoa.json")
+        for hidrometro in abrirBanco:
+            if matriculaBuscar == hidrometro['Matricula']:
+                listaHidrometro.append(hidrometro)
+        maisAtual = listaHidrometro.pop()
+        return maisAtual
+
+    def maiorConsumo(self):
+        ''' Função responsável por retornar os 10 hidrômetros de maior consumo '''
+        abrirBanco = self.abrirBanco("BancoNevoa/bancoNevoa.json")
+        banco = self.bancoSimplificado(abrirBanco)
+        max = 0
+        matricula = 0
+        for hidrometro in banco:
+            hidrometro['Consumo'] = hidrometro['Consumo']
+            if hidrometro['Consumo'] > max:
+                max = hidrometro['Consumo']
+                matricula = 0
 nova = Conexao()
 threading.Thread(target=nova.inscrevendoTopico).start()
 while True:
