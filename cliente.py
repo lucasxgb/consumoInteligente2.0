@@ -20,7 +20,7 @@ def retornoLog(cliente, dadosUsuario, nivel, buf):
     print('Log: ', buf)
 
 ######## Verifica conexão ################
-def verifcaConexao(cliente, dadosUsuario, flags, rc)
+def verifcaConexao(cliente, dadosUsuario, flags, rc):
     if rc ==0:
         print('Conectado, código de retorno= ', rc)
     else:

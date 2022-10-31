@@ -144,20 +144,28 @@ class Conexao():
         listaOrdenada = []
         max = 0
         matricula = 0
-        while banco:
+        tamanho = len(banco)
+        while tamanho != 0:
             for hidrometro in banco:
                 hidrometro['Consumo'] = hidrometro['Consumo']
                 if hidrometro['Consumo'] > max:
                     max = hidrometro['Consumo']
                     matricula = hidrometro['Matricula']
             for hidro in banco:
-                if hidro[matricula] == hidro:
-                    listaOrdenada.append(hidro)
-                    banco.remove(hidro)
-        return listaOrdenada
+                if int(matricula) == int(hidro['Matricula']):
+                    if len(listaOrdenada) < 10:
+                        listaOrdenada.append(hidro)
+                        banco.remove(hidro)
+                    else:
+                        tamanho = 0
+            max = 0
+            matricula = 0
+        return listaOrdenada #listaOrdenada
 
 nova = Conexao()
 threading.Thread(target=nova.inscrevendoTopico).start()
-while True:
-    nova.maiorConsumo()
+lista = nova.maiorConsumo()
+print(lista)
+#while True:
+
 
