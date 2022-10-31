@@ -141,15 +141,23 @@ class Conexao():
         ''' Função responsável por retornar os 10 hidrômetros de maior consumo '''
         abrirBanco = self.abrirBanco("BancoNevoa/bancoNevoa.json")
         banco = self.bancoSimplificado(abrirBanco)
+        listaOrdenada = []
         max = 0
         matricula = 0
-        for hidrometro in banco:
-            hidrometro['Consumo'] = hidrometro['Consumo']
-            if hidrometro['Consumo'] > max:
-                max = hidrometro['Consumo']
-                matricula = 0
+        while banco:
+            for hidrometro in banco:
+                hidrometro['Consumo'] = hidrometro['Consumo']
+                if hidrometro['Consumo'] > max:
+                    max = hidrometro['Consumo']
+                    matricula = hidrometro['Matricula']
+            for hidro in banco:
+                if hidro[matricula] == hidro:
+                    listaOrdenada.append(hidro)
+                    banco.remove(hidro)
+        return listaOrdenada
+
 nova = Conexao()
 threading.Thread(target=nova.inscrevendoTopico).start()
 while True:
-    nova.calculaMedia()
+    nova.maiorConsumo()
 
