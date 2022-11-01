@@ -20,12 +20,15 @@ class Nuvem:
         if mensagem.topic == 'nuvem/Hidrometro': #topico para um hidrômetro especifico
             listaMensagem.append(json.loads(mensagemDecode))
         elif mensagem.topic == 'nuvem/Medias':
-            self.calculaMedia() #falta enviar para nevoa
-            
+            self.calculaMedia() 
+            self.enviaMedia()
+
 
     # Log - Registro do cliente
     def retornoLog(self, cliente, dadosUsuario, nivel, buf):
         print('Log: ', buf)
+
+
 
 
     def verificaConexao(self, cliente, dadosUsuario, flags, rc):
@@ -54,7 +57,6 @@ class Nuvem:
         """ Função responsável por inscrever a névoa no tópico do hidrômetro utilizando mqtt """
         client = self.inicia()
         client.loop_start()  # para ver o retorno das chamadas
-        print('Se inscrevendo no tópico')
         c = True
         while c == True:
             client.subscribe('nuvem/Medias', 1)
@@ -69,5 +71,16 @@ class Nuvem:
         for item in listaMedia:
             listaMedia.remove(item)
         return mediaGeral
+
+    def enviaMedia(self):
+        """ Função responsável por inscrever a névoa no tópico do hidrômetro utilizando mqtt """
+        client = self.inicia()
+        media = self.calculaMedia()
+        client.loop_start()  # para ver o retorno das chamadas
+        c = True
+        while c == True:
+            client.subscribe('nuvem/mediaCorte', 1)
+            client.publish('nuvem/mediaCorte', media)
+            client.on_message = self.retorno  # inserindo a função de retorno
 nova = Nuvem()
 nova.inscrevendoTopico()
