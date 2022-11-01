@@ -16,9 +16,9 @@ class Nuvem:
 
          """
         mensagemDecode = str(mensagem.payload.decode('utf-8'))
-        if mensagem.topic == 'nuvem/Hidrometros': #se a mensagem chegar no tópico de hidrometros, ele guarda a informação no banco
+        if mensagem.topic == 'nuvem/Hidrometro': #topico para um hidrômetro especifico
             listaMensagem.append(json.loads(mensagemDecode))
-        else:  #se não ele tem que verificar se a mensagem que chega é pra bloquear ou não
+        elif mensagem.topic == 'nuvem/Medias':
             print("Mensagem recebida", mensagemDecode)
             print('Tópico da Mensagem', mensagem.topic)
 
@@ -49,3 +49,16 @@ class Nuvem:
         print('Conectado no servidor')
         return client
 
+    def inscrevendoTopico(self):
+        """ Função responsável por inscrever a névoa no tópico do hidrômetro utilizando mqtt """
+        client = self.inicia()
+        client.loop_start()  # para ver o retorno das chamadas
+        print('Se inscrevendo no tópico')
+        c = True
+        while c == True:
+            client.subscribe('nuvem/Medias', 1)
+            client.on_message = self.retorno# inserindo a função de retorno
+
+
+nova = Nuvem()
+nova.inscrevendoTopico()

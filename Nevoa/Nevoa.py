@@ -127,6 +127,14 @@ class Conexao():
         mediaAtual = (somaConsumo/quantidadeConsumo)
         return mediaAtual
 
+    def enviaMedia(self):
+        client = self.inicia() #recebe o cliente
+        client.loop_start()
+        client.subscribe('nuvem/Medias', 1)
+        media = self.calculaMedia()
+        client.publish('nuvem/Medias', media, qos=1)
+        client.on_message = self.retorno
+
     def hidrometroEspecifico(self, matriculaBuscar):
         ''' Função responsável por retornar um hidrômetro especifico e mais atualizado '''
         listaHidrometro = []
@@ -164,8 +172,8 @@ class Conexao():
 
 nova = Conexao()
 threading.Thread(target=nova.inscrevendoTopico).start()
-lista = nova.maiorConsumo()
-print(lista)
+while True:
+    nova.enviaMedia()
 #while True:
 
 
