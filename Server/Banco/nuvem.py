@@ -6,6 +6,7 @@ import paho.mqtt.client as mqtt
 import threading
 
 listaMensagem = []
+listaMedia = []
 class Nuvem:
     def retorno(self, cliente, dadosUsuario, mensagem):
         """ Função para tratar as mensagens que chega ao tópico que está escrito
@@ -19,8 +20,8 @@ class Nuvem:
         if mensagem.topic == 'nuvem/Hidrometro': #topico para um hidrômetro especifico
             listaMensagem.append(json.loads(mensagemDecode))
         elif mensagem.topic == 'nuvem/Medias':
-            print("Mensagem recebida", mensagemDecode)
-            print('Tópico da Mensagem', mensagem.topic)
+            self.calculaMedia() #falta enviar para nevoa
+            
 
     # Log - Registro do cliente
     def retornoLog(self, cliente, dadosUsuario, nivel, buf):
@@ -59,6 +60,14 @@ class Nuvem:
             client.subscribe('nuvem/Medias', 1)
             client.on_message = self.retorno# inserindo a função de retorno
 
-
+    def calculaMedia(self):
+        valor = 0
+        mediaGeral = 0
+        for item in listaMedia:
+            valor += item
+        mediaGeral = (valor/len(listaMedia))
+        for item in listaMedia:
+            listaMedia.remove(item)
+        return mediaGeral
 nova = Nuvem()
 nova.inscrevendoTopico()
