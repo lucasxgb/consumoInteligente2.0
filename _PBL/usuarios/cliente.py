@@ -69,15 +69,15 @@ def menuAux():
 def menu():
     escolha = menuAux()
     if escolha == 1:
-        client.publish("nuvem", f"GET - 0 - nuvem/# - cliente - pegarHidrometroEspecifico - GET_hidrometroEspecifico/{matricula}", 1, False)
+        client.publish("nuvem", f"GET - 0 - nuvem - cliente - pegarHidrometroEspecifico - GET_hidrometroEspecifico/{matricula}", 1, False)
     elif escolha == 2:
-        client.publish("nuvem", f"GET - 0 - nuvem/# - cliente - verHistorico - GET_historicoHidrômetro/{matricula}", 1, False)
+        client.publish("nuvem", f"GET - 0 - nuvem - cliente - verHistorico - GET_historicoHidrômetro/{matricula}", 1, False)
     elif escolha == 3:
-        client.publish("nuvem", f"GET - 0 - nuvem/# - cliente - verificarVazamento - GET_verficiarVazamento/{matricula}", 1, False)
+        client.publish("nuvem", f"GET - 0 - nuvem - cliente - verificarVazamento - GET_verficiarVazamento/{matricula}", 1, False)
     elif escolha == 4:
-        client.publish("nuvem", f"GET - 0 - nuvem/# - cliente - gerarConta - GET_gerarConta/{matricula}", 1, False)
+        client.publish("nuvem", f"GET - 0 - nuvem - cliente - gerarConta - GET_gerarConta/{matricula}", 1, False)
     elif escolha == 5:
-        client.publish("nuvem", f"POST - 0 - nuvem/# - cliente - pagarConta - POST_pagarConta/{matricula}", 1, False)
+        client.publish("nuvem", f"POST - 0 - nuvem - cliente - pagarConta - POST_pagarConta/{matricula}", 1, False)
 
 
 sleep(1)
@@ -94,9 +94,9 @@ while True:
         topicoRemetente = dados_requisicao["topico"]
         rota = dados_requisicao["rota"]
         
-        print(f"metodo: {verboHTTP}, status: {status} , topico: {topicoRemetente}, remetente: {remetente}, rota{rota} msg: {msg}")
+        print(f"metodo: {verboHTTP}, status: {status} , topico: {topicoRemetente}, remetente: {remetente}, rota{rota}, msg: {msg}")
         
-        #client.publish("nevoa/01", f"GET - {cont} - nevoa/01 - nevoa - fazer_tal_coisa - nevoa conectada ao servidor", 1, False)
+        client.publish(f"{topicoRemetente}", f"metodo: {verboHTTP}, status: {status} , topico: {topicoRemetente}, remetente: {remetente}, rota{rota}, msg: {msg}", 1, False)
 
         # client.publish(topic, msgEnviar)
 

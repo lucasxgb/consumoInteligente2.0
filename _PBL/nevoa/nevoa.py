@@ -62,7 +62,7 @@ while True:
         topicoRemetente = dados_requisicao["topico"]
         rota = dados_requisicao["rota"]
         
-        print(f"metodo: {verboHTTP}, status: {status} , topico: {topicoRemetente}, remetente: {remetente}, msg: {msg}")
+        print(f"metodo: {verboHTTP}, status: {status} , topico: {topicoRemetente}, remetente: {remetente}, rota:{rota}, msg: {msg}")
         
         ## API aqui
         # client.publish(topic, msgEnviar)

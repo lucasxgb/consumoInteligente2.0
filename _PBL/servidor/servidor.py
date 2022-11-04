@@ -1,3 +1,5 @@
+import json
+
 import paho.mqtt.client as mqtt
 from threading import Thread
 from time import sleep
@@ -25,7 +27,7 @@ def on_message(client, userdata, msg):
     # Colocar dados de mensagem em um dicionario e colocar em fila para tratar
     dados = str(msg.payload.decode("utf-8")).split(" - ")
     
-    print(f"metodo: {dados[0]} - status: {dados[1]} - topico: {dados[2]} - remetente: {dados[3]} - msg: {dados[4]}")
+    print(f"metodo: {dados[0]} - status: {dados[1]} - topico: {dados[2]} - remetente: {dados[3]} - rota: {dados[4]} - msg: {dados[5]}")
     
     dic = {"metodo" : dados[0], "status" : dados[1] ,"topico" : dados[2], "remetente" : dados[3], "rota" : dados[4], "msg" : dados[5]}
     lista_de_requisições.append(dic)
@@ -61,7 +63,7 @@ while True:
         topicoRemetente = dados_requisicao["topico"]
         rota = dados_requisicao["rota"]
         
-        print(f"metodo: {verboHTTP}, status: {status} , topico: {topicoRemetente}, remetente: {remetente}, msg: {msg}")
+        print(f"metodo: {verboHTTP}, status: {status} , topico: {topicoRemetente}, remetente: {remetente}, rota: {rota}, msg: {msg}")
         
         ## API aqui
         # client.publish(topic, msgEnviar)
@@ -74,6 +76,15 @@ while True:
         elif remetente == "servidor":
             # receber dados do hidrometro, e mandar resposta
             pass
+        elif remetente == "cliente":
+            mensagem = msg.split('/')
+            print(mensagem)
+            rota = mensagem[0]
+            matricula = mensagem[1]
+            if verboHTTP == 'GET':
+                if rota == "GET_hidrometroEspecifico":
+                    client.publish("cliente", f"GET - 200 - nevoa/01/# - cliente - pegarHidrometroEspecifico - GET_hidrometroEspecifico/{matricula}", 1, False)
+
         elif remetente == "adm":
             # receber dados do adm, e mandar resposta
             pass
