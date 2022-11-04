@@ -40,6 +40,7 @@ client.loop_start()
 # Topicos ouvindo
 # ADM só precisa ficar ouvindo o adm, pois o servidor e nevoa, manda pra rota de adm o que o adm precisa
 client.subscribe("adm")
+client.subscribe("nuvem")
 
 client.on_connect = on_connect
 client.on_message = on_message

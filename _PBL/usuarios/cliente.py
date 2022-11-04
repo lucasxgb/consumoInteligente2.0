@@ -46,7 +46,8 @@ client.connect(broker)
 client.loop_start()
 
 # Topicos ouvindo
-client.subscribe("nevoa/01/#")
+client.subscribe("cliente")
+client.subscribe("nuvem")
 
 client.on_connect = on_connect
 client.on_message = on_message
@@ -57,16 +58,28 @@ def menuAux():
     print('''Selecione a opção desejada
            [1] - VER HIDRÔMETRO
            [2] - VER HISTÓRICO HIDRÔMETRO
+           [3] - VERIFICA VAZAMENTO
+           [4] - GERAR CONTA
+           [5] - PAGAR CONTA
            ''')
     opt = int(input('Opção -> '))
     return opt
 
+
 def menu():
     escolha = menuAux()
     if escolha == 1:
-        client.subscribe(f"nevoa/01/{matricula}")
-        escolha = 0
-        
+        client.publish("nuvem", f"GET - 0 - nuvem/# - cliente - pegarHidrometroEspecifico - GET_hidrometroEspecifico/{matricula}", 1, False)
+    elif escolha == 2:
+        client.publish("nuvem", f"GET - 0 - nuvem/# - cliente - verHistorico - GET_historicoHidrômetro/{matricula}", 1, False)
+    elif escolha == 3:
+        client.publish("nuvem", f"GET - 0 - nuvem/# - cliente - verificarVazamento - GET_verficiarVazamento/{matricula}", 1, False)
+    elif escolha == 4:
+        client.publish("nuvem", f"GET - 0 - nuvem/# - cliente - gerarConta - GET_gerarConta/{matricula}", 1, False)
+    elif escolha == 5:
+        client.publish("nuvem", f"POST - 0 - nuvem/# - cliente - pagarConta - POST_pagarConta/{matricula}", 1, False)
+
+
 sleep(1)
 matricula = int(input('Informe a matricula do seu hidrômetro -> '))
 while True:

@@ -44,6 +44,7 @@ client.loop_start()
 # Topicos ouvindo
 client.subscribe("nevoa/01/#")
 
+
 client.on_connect = on_connect
 client.on_message = on_message
 

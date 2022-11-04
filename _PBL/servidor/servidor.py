@@ -36,7 +36,7 @@ client.connect(broker)
 client.loop_start()
 
 # Topicos ouvindo
-client.subscribe("nevoa/#")
+client.subscribe("nuvem")
 client.subscribe("adm")
 client.subscribe("cliente")
 
