@@ -16,7 +16,7 @@ port = 3000
 numero = random.randint(1,99999)
 client_id = f"cliente_{numero}"
 
-lista_de_requisições = []
+lista_de_requisicoes = []
 
 
 def on_connect(client, userdata, flags, rc):
@@ -38,7 +38,7 @@ def on_message(client, userdata, msg):
 
     dic = {"metodo" : dados[0], "status" : dados[1] ,"topico" : dados[2], "remetente" : dados[3], "rota" : dados[4], "msg" : dados[5]}
     
-    lista_de_requisições.append(dic)
+    lista_de_requisicoes.append(dic)
 
 
 client = mqtt.Client(client_id)
@@ -85,7 +85,7 @@ matricula = int(input('Informe a matricula do seu hidrômetro -> '))
 while True:
     # Ficar esperando as mensagens chegar, e verificar - Chamar API dependendo 
     
-    for conexao in lista_de_requisições:
+    for conexao in lista_de_requisicoes:
         dados_requisicao = conexao
         verboHTTP = dados_requisicao["metodo"]
         status = dados_requisicao["status"]
@@ -95,13 +95,15 @@ while True:
         rota = dados_requisicao["rota"]
         
         print(f"metodo: {verboHTTP}, status: {status} , topico: {topicoRemetente}, remetente: {remetente}, rota{rota}, msg: {msg}")
-        
-        client.publish(f"{topicoRemetente}", f"metodo: {verboHTTP}, status: {status} , topico: {topicoRemetente}, remetente: {remetente}, rota{rota}, msg: {msg}", 1, False)
+        if remetente == 'cliente':
+            client.publish(f"{topicoRemetente}", f"metodo: {verboHTTP}, status: {status} , topico: {topicoRemetente}, remetente: {remetente}, rota{rota}, msg: {msg}", 1, False)
+        else:
+            dados_exibir = json.loads(msg)
+            print(dados_exibir)
 
-        # client.publish(topic, msgEnviar)
 
     
-        lista_de_requisições.pop(0)
+        lista_de_requisicoes.pop(0)
 
 
     menu()
