@@ -98,18 +98,13 @@ client.on_message = on_message
 
 login(matricula)
 
-sleep(0.5)
+dadosHidro = sleep(0.5)
 
 dadosLogin = lista_de_requisições[0]
 lista_de_requisições.pop(0)
 
 if json.loads(dadosLogin['json'])['login'] == "sucesso":
     while True:
-        sleep(1)
-        consumo += vazao
-        criarJson = '{"bloqueado" : "1", "consumo" : "2", "matricula" : "3"}'.replace("1",bloqueado).replace("2",consumo).replace("3",matricula)
-        client.publish(nuvem_se_conectar, f"POST - 200 - hidrometro/{matricula} - dadosHidrometro/ - {criarJson}", 1, False)
-
         # Ficar esperando as mensagens chegar, e verificar - Chamar API dependendo do que veio
         # Mostrar mensagem que chegou na lista
         for conexao in lista_de_requisições:
@@ -118,20 +113,34 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
             status = dados_requisicao["status"]
             remetente = dados_requisicao["remetente"]
             rota = dados_requisicao["rota"]
-            dadosJson = dados_requisicao["json"]
+            dadosJson = json.loads(dados_requisicao["json"])
             
             #print(f"metodo : {verboHTTP}, status : {status} , remetente : {remetente}, rota : {rota}, json : {dadosJson}")
 
             # Vericar os dados recebidos e alterar.
 
-            if rota == "bloquearHidrometro":  # Dados do Hidrometro -> Referente a rota 01
+            if rota == "bloquearHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
                 bloqueado = True
-            elif rota == "desbloquearHidrometro":  # Dados do Hidrometro -> Referente a rota 01
+            elif rota == "desbloquearHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
                 bloqueado = False
+            elif rota == "login/":  # Dados do Hidrometro -> Referente a rota 01
+                bloqueado = dadosJson['bloqueado']
+                consumo = dadosJson['consumo']
+                vazao = 1
             
             # client.publish(topic, msgEnviar)
 
             lista_de_requisições.pop(0)
+        
         menu()
+
+        sleep(1)
+        
+        if bloqueado == True:
+            consumo += vazao
+        criarJson = '{"bloqueado" : "1", "consumo" : "2", "matricula" : "3"}'.replace("1",bloqueado).replace("2",consumo).replace("3",matricula)
+        client.publish(nuvem_se_conectar, f"POST - 200 - hidrometro/{matricula} - dadosHidrometro/ - {criarJson}", 1, False)
+
+
 
 client.loop_stop()

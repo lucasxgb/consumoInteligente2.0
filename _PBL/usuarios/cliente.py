@@ -124,16 +124,15 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
             dadosJson = dados_requisicao["json"]
             
             #print(f"metodo : {verboHTTP}, status : {status} , remetente : {remetente}, rota : {rota}, json : {dadosJson}")
-
             # Vericar os dados recebidos e mostrar em tela mensagens.
 
-            if rota == "dadosHidrometro":  # Dados do Hidrometro -> Referente a rota 01
+            if rota == "dadosHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
                 informacoesHidro = json.loads(dadosJson)
                 print(f"Vazão :  {informacoesHidro['vazao']}")
                 print(f"Metros Cubicos Gastos :  {informacoesHidro['MCGastos']}")
                 print(f"Vazamento :  {informacoesHidro['vazamento']}")
                 print(f"Vazamento :  {informacoesHidro['vazamento']}")
-            elif rota == "historicoHidrometro": # Historico do Hidrometro -> Referente a rota 02
+            elif rota == "historicoHidrometro/": # Historico do Hidrometro -> Referente a rota 02
                 informacoesHidro = json.loads(dadosJson)
                 print("Ultimas 5 informações do Hidrometro")
                 print(f" Vazão Atual :  {informacoesHidro['info01']}")
@@ -141,13 +140,12 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
                 print(f" Vazão Anterior 02 :  {informacoesHidro['info03']}")
                 print(f" Vazão Anterior 03 :  {informacoesHidro['info04']}")
                 print(f" Vazão Anterior 04 :  {informacoesHidro['info05']}")
-            elif rota == "contaGerada": # Gerar Conta -> Referente a rota 03
+            elif rota == "contaGerada/": # Gerar Conta -> Referente a rota 03
                 informacoesHidro = json.loads(dadosJson)
                 print(f" Valor a Pagar:  {informacoesHidro['valorPagar']}")
-            elif rota == "ontaPaga": # Pagar Conta -> Referente a rota 04
+            elif rota == "contaPaga/": # Pagar Conta -> Referente a rota 04
                 informacoesHidro = json.loads(dadosJson)
                 print(f" Informação :  {informacoesHidro['contaPaga']}")
-
             # client.publish(topic, msgEnviar)
 
             lista_de_requisições.pop(0)
