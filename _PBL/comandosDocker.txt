@@ -1,0 +1,9 @@
+########## importar o docker mais atualizado ############# 
+docker pull eclipse-mosquitto
+
+####### executar o docker ############3
+docker run -it --name mosquitto -p 3000:3000 eclipse-mosquitto 
+
+####### pra executar com o meu arquivo de configuração ###########3
+ docker run -it --name mosquitto -p 3000:300 -v /mosquitto:/mosquitto/ eclipse-mosquitto 
+ docker run -it --name mosquitto -p 3000:3000 -v  echo %cd%:/mosquitto/ eclipse-mosquitto 
