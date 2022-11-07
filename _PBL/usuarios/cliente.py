@@ -35,7 +35,7 @@ def on_message(client, userdata, msg):
 
 def login(matricula):
     criarJson = '{"matricula":"-"}'.replace('-', matricula)
-    client.publish(nuvem_se_conectar, f"Post - 200 - cliente/{matricula} - loginCliente - {criarJson}", 1, False)
+    client.publish(nevoa_se_conectar, f"Post - 200 - cliente/{matricula} - loginCliente - {criarJson}", 1, False)
 
 
 def menuAux():
@@ -51,18 +51,18 @@ def menuAux():
 
 
 def menu(client, matricula):
-    # O cliente manda os dados para a nuvem
+    # O cliente manda os dados para a nevoa
     escolha = menuAux()
     criarJson = '{"" : ""}'
     if escolha == 1:
-        client.publish(nuvem_se_conectar, f"GET - 200 - cliente/{matricula} - pegarHidrometroEspecifico/{matricula} - {criarJson}", 1, False)
+        client.publish(nevoa_se_conectar, f"GET - 200 - cliente/{matricula} - pegarHidrometroEspecifico/{matricula} - {criarJson}", 1, False)
     elif escolha == 2:
-        client.publish(nuvem_se_conectar, f"GET - 200 - cliente/{matricula} - verHistoricoHidrômetro/{matricula} - {criarJson}", 1, False)
+        client.publish(nevoa_se_conectar, f"GET - 200 - cliente/{matricula} - verHistoricoHidrômetro/{matricula} - {criarJson}", 1, False)
     elif escolha == 3:
-        client.publish(nuvem_se_conectar, f"GET - 200 - cliente/{matricula} - gerarConta/{matricula} - {criarJson}", 1, False)
+        client.publish(nevoa_se_conectar, f"GET - 200 - cliente/{matricula} - gerarConta/{matricula} - {criarJson}", 1, False)
     elif escolha == 4:
         criarJson = '{"matricula" : "-"}'.replace("-", matricula)
-        client.publish(nuvem_se_conectar, f"POST - 200 - cliente/{matricula} - pagarConta/ - {criarJson}", 1, False)
+        client.publish(nevoa_se_conectar, f"POST - 200 - cliente/{matricula} - pagarConta/ - {criarJson}", 1, False)
 
 def obterMatricula():
     mat = input('Informe a matricula do seu hidrômetro -> ')
@@ -72,23 +72,23 @@ def obterMatricula():
     return mat
 
 
-def nuvemConectar(matricula):
+def nevoaConectar(matricula):
     if matricula > 0 and matricula <= 100:
-        nuvem_se_conectar = "nuvem/01"
+        nevoa_se_conectar = "nevoa/01"
     elif matricula > 100 and matricula <= 200:
-        nuvem_se_conectar = "nuvem/02"
+        nevoa_se_conectar = "nevoa/02"
     elif matricula > 200 and matricula <= 300:
-        nuvem_se_conectar = "nuvem/03"
+        nevoa_se_conectar = "nevoa/03"
     elif matricula > 300 and matricula <= 400:
-        nuvem_se_conectar = "nuvem/04"
+        nevoa_se_conectar = "nevoa/04"
     elif matricula > 400 and matricula <= 500:
-        nuvem_se_conectar = "nuvem/05"
+        nevoa_se_conectar = "nevoa/05"
 
 broker = 'broker.hivemq.com'
 port = 3000
 
 matricula = obterMatricula()
-nuvem_se_conectar = nuvemConectar(matricula)
+nevoa_se_conectar = nevoaConectar(matricula)
 
 client_id = f"cliente_{matricula}"
 lista_de_requisições = []
