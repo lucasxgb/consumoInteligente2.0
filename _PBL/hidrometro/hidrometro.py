@@ -36,7 +36,7 @@ def on_message(client, userdata, msg):
 
 def login(matricula):
     criarJson = '{"matricula":"-"}'.replace('-', matricula)
-    client.publish(nuvem_se_conectar, f"Post - 200 - hidrometro/{matricula} - loginHidrometro/ - {criarJson}", 1, False)
+    client.publish(nevoa_se_conectar, f"Post - 200 - hidrometro/{matricula} - loginHidrometro/ - {criarJson}", 1, False)
 
 
 def menu(client, matricula, vazao, consumo, ):
@@ -61,17 +61,17 @@ def obterMatricula():
     return mat
 
 
-def nuvemConectar(matricula):
+def nevoaConectar(matricula):
     if matricula > 0 and matricula <= 100:
-        nuvem_se_conectar = "nuvem/01"
+        nevoa_se_conectar = "nevoa/01"
     elif matricula > 100 and matricula <= 200:
-        nuvem_se_conectar = "nuvem/02"
+        nevoa_se_conectar = "nevoa/02"
     elif matricula > 200 and matricula <= 300:
-        nuvem_se_conectar = "nuvem/03"
+        nevoa_se_conectar = "nevoa/03"
     elif matricula > 300 and matricula <= 400:
-        nuvem_se_conectar = "nuvem/04"
+        nevoa_se_conectar = "nevoa/04"
     elif matricula > 400 and matricula <= 500:
-        nuvem_se_conectar = "nuvem/05"
+        nevoa_se_conectar = "nevoa/05"
 
 vazao = 0
 consumo = 0
@@ -81,7 +81,7 @@ broker = 'broker.hivemq.com'
 port = 3000
 
 matricula = obterMatricula()
-nuvem_se_conectar = nuvemConectar(matricula)
+nevoa_se_conectar = nevoaConectar(matricula)
 
 client_id = f"hidrometro_{matricula}"
 lista_de_requisições = []
@@ -98,7 +98,7 @@ client.on_message = on_message
 
 login(matricula)
 
-dadosHidro = sleep(0.5)
+sleep(0.5)
 
 dadosLogin = lista_de_requisições[0]
 lista_de_requisições.pop(0)
@@ -124,22 +124,26 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
             elif rota == "desbloquearHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
                 bloqueado = False
             elif rota == "login/":  # Dados do Hidrometro -> Referente a rota 01
-                bloqueado = dadosJson['bloqueado']
+                if dadosJson['bloqueado'] == "0":
+                    bloqueado = False
+                else:
+                    bloqueado = True
                 consumo = dadosJson['consumo']
-                vazao = 1
-            
+                vazao = 1 
             # client.publish(topic, msgEnviar)
-
             lista_de_requisições.pop(0)
         
         menu()
-
         sleep(1)
-        
+
         if bloqueado == True:
             consumo += vazao
-        criarJson = '{"bloqueado" : "1", "consumo" : "2", "matricula" : "3"}'.replace("1",bloqueado).replace("2",consumo).replace("3",matricula)
-        client.publish(nuvem_se_conectar, f"POST - 200 - hidrometro/{matricula} - dadosHidrometro/ - {criarJson}", 1, False)
+            bloqueadoMandar = "1"
+        else:
+            bloqueadoMandar = "0"
+            
+        criarJson = '{"bloqueado" : "1", "consumo" : "2", "matricula" : "3"}'.replace("1",bloqueadoMandar).replace("2",consumo).replace("3",matricula)
+        client.publish(nevoa_se_conectar, f"POST - 200 - hidrometro/{matricula} - dadosHidrometro/ - {criarJson}", 1, False)
 
 
 

@@ -1,0 +1,16 @@
+{
+    "01" : {
+        "vazando": "0",
+        "bloqueado": "0",
+        "consumoAtual" : "0",
+        "consumoAnterior01" : "0",
+        "consumoAnterior02" : "0",
+        "consumoAnterior03" : "0",
+        "consumoAnterior04" : "0",
+        "contaPagar" : "0",
+        "contaAnterior01" : "0",
+        "contaAnterior02" : "0",
+        "contaAnterior03" : "0",
+        "contaAnterior04" : "0"
+    }
+}
