@@ -8,6 +8,7 @@
 #### TEC502 - Concorrência e Conectividade 
 
 |Esse projeto foi desenvolvido por: 
+
 	 [Lucas Gabriel da Silva Lima Reis](https://github.com/lucasxgb)
 
 	 [Silas Silva Costa](https://github.com/silas-silva)
