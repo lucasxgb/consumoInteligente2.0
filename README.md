@@ -2,8 +2,8 @@
 
 <p align="center">
 <img src="https://img.shields.io/badge/Status-Concluido-green?style=for-the-badge"/>
-<h4> Universidade Estadual de Feira de Santana </h4>
-<h4>  TEC502 - Concorrência e Conectividade  </h4>
+<h4 align="center" > Universidade Estadual de Feira de Santana </h4>
+<h4 align="center" >  TEC502 - Concorrência e Conectividade  </h4>
 </p>
 
 
