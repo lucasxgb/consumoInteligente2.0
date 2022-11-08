@@ -4,7 +4,8 @@ services:
     image: eclipse-mosquitto
     container_name: mosquitto
     volumes:
-      - /_PBL/docker-mosquitto/mosquitto:/mosquitto
+      - ./docker-mosquitto/mosquitto/config:/mosquitto/config/
+      - ./docker-mosquitto/mosquitto/data:/mosquitto/data/
+      - ./docker-mosquitto/mosquitto/log:/mosquitto/log/
     ports:
-      - 1883:1883
       - 3000:3000  
