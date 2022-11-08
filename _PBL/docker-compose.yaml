@@ -1,0 +1,10 @@
+version: '3.0'
+services:
+   mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    volumes:
+      - /_PBL/docker-mosquitto/mosquitto:/mosquitto
+    ports:
+      - 1883:1883
+      - 3000:3000  

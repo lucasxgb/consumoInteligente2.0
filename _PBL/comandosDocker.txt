@@ -6,4 +6,12 @@ docker run -it --name mosquitto -p 3000:3000 eclipse-mosquitto
 
 ####### pra executar com o meu arquivo de configuração ###########3
  docker run -it --name mosquitto -p 3000:300 -v /mosquitto:/mosquitto/ eclipse-mosquitto 
- docker run -it --name mosquitto -p 3000:3000 -v  echo %cd%:/mosquitto/ eclipse-mosquitto 
+ docker run -it --name mosquitto -p 3000:3000 -v cd/mosquitto/:/mosquitto/ eclipse-mosquitto 
+ docker run --name mosquitto -p 3000:3000 -v D:/Documentos/PBLRedes/consumoInteligente2.0/consumoInteligente2.0/_PBLmosquitto.conf:/mosquitto/config/mosquitto.conf eclipse-mosquitto
+ docker run --name mosquitto -p 1881:1881 -v ${pwd}/mosquitto.conf:/mosquitto/config/mosquitto.conf eclipse-mosquitto
+
+ docker run -itd --name=mqtt --restart=always --net=host -v /${pwd}/mosquitto/config:/mosquitto/config -v /${pwd}/mosquitto/data:/mosquitto/data -v /${pwd}/mosquitto/log:/mosquitto/log eclipse-mosquitto
+ docker run -it --name mosquitto -p 3000:3000 -v /${pwd}/mosquitto/config:/mosquitto/config eclipse-mosquitto
+ docker run -it --name mosquitto -p 3000:3000 -v D:/Documentos/PBLRedes/consumoInteligente2.0/consumoInteligente2.0/_PBL/docker-mosquitto/mosquitto/config:/mosquitto/config -v D:/Documentos/PBLRedes/consumoInteligente2.0/consumoInteligente2.0/_PBL/docker-mosquitto/mosquitto/data:/mosquitto/data -v D:/Documentos/PBLRedes/consumoInteligente2.0/consumoInteligente2.0/_PBL/docker-mosquitto/mosquitto/log:/mosquitto/log eclipse-mosquitto
+
+ docker run -it --name mosquitto -p 3000:3000 -v D:/Documentos/PBLRedes/consumoInteligente2.0/consumoInteligente2.0/_PBL/docker-mosquitto/mosquitto/config:/mosquitto/config eclipse-mosquitto

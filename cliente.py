@@ -12,6 +12,7 @@ import time
 ############ Função de retorno para processar as mensagens ##############
 def retorno(cliente, dadosUsuario, mensagem):
     mensagemDecode = str(mensagem.payload.decode('utf-8'))
+    print('aqui')
     print("Mensagem recebida", mensagemDecode)
     print('Tópico da Mensagem', mensagem.topic)
 
@@ -26,10 +27,11 @@ def verifcaConexao(cliente, dadosUsuario, flags, rc):
     else:
         print('Não foi possível se conectar, código= ', rc)
 
-broker = 'broker.hivemq.com'
+broker = '127.0.0.1'
+port = 3000
 client = mqtt.Client('MatriculaHidro')
 print('Conectando no broker')
-client.connect(broker)
+client.connect(broker, port)
 client.loop_start()
 print('Se inscrevendo no tópico')
 client.subscribe('enviarDados/Hidrometros', qos = 0)

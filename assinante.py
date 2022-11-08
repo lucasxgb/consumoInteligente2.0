@@ -36,11 +36,11 @@ class Conexao():
     #   return urlTopico, dadosEnviar
 
     def inicia(self):
-        broker = 'broker.hivemq.com'
+        broker = 'localhost'
         client = mqtt.Client('nevoa', random.randint(1, 1000))
         client.on_connect = self.verificaConexao  # metodo do mqtt responsavel por verificar se estabeleceu a conexão
         # ou não
-        client.connect(broker)
+        client.connect(broker,port=3000)
         print('Conectado no servidor')
         return client
 
