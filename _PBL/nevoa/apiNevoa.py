@@ -61,7 +61,7 @@ class Api:
                 Json: Json contendo informações se o usuario existe ou não
         """
 
-        reultado = self.POST_Login_hidrometro(matricula)
+        reultado = self.POST_LoginHidrometro(matricula)
 
         return json.dumps('{"login": "sucesso"}')
 
@@ -165,7 +165,8 @@ class Api:
         
         # Verificar se o Cliente já tem divida, se sim, retornar a divida dele atual.
         if int(clientes[matricula]["contaPagar"]) > 0:
-            return json.dumps(f'"conta" : "{clientes[matricula]["contaPagar"]}"')
+            retorno = "{-}"
+            return retorno.replace("-",f'"conta" : "{clientes[matricula]["contaPagar"]}"')
         
         else:
             # Pegar dados do banco
@@ -190,7 +191,8 @@ class Api:
             with open("banco/bancoNevoa.json", 'w' , encoding='utf-8') as database:
                     json.dump(hidrometros, database, indent=4)  
             
-            return json.dumps(f'"conta" : "{valorPagar}"')
+            retorno = "{-}"
+            return retorno.replace("-",f'"conta" : "{valorPagar}"')
 
     
     def PUT_Pagarconta(self, matricula):
@@ -216,7 +218,7 @@ class Api:
         with open("banco/bancoNevoa.json", 'w' , encoding='utf-8') as database:
             json.dump(clientes, database, indent=4)  
         
-        return json.dumps('{"conta": "paga"}')
+        return '{"conta": "paga"}'
 
     # Metodos Hidro
 

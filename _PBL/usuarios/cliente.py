@@ -35,7 +35,6 @@ def on_message(client, userdata, msg):
 
 def login(matricula, nevoa_se_conectar):
     criarJson = '{"matricula":"-"}'.replace('-', str(matricula))
-    print(nevoa_se_conectar)
     client.publish(nevoa_se_conectar, f"POST - 200 - cliente/{matricula} - loginCliente/ - {criarJson}", 1, False)
 
 
@@ -54,7 +53,7 @@ def menuAux():
 def menu(client, matricula, nevoa_se_conectar):
     # O cliente manda os dados para a nevoa
     escolha = menuAux()
-    criarJson = '{"matricula" : "-"}'.replace("-", matricula)
+    criarJson = '{"matricula" : "-"}'.replace("-", str(matricula))
     if escolha == 1:
         client.publish(nevoa_se_conectar, f"GET - 200 - cliente/{matricula} - pegarHidrometroEspecifico/ - {criarJson}", 1, False)
     elif escolha == 2:
@@ -75,22 +74,21 @@ def obterMatricula():
 
 def nevoaConectar(matricula):
     if matricula > 0 and matricula <= 100:
-        return "nevoa/01"
+        return "nevoa/1"
     elif matricula > 100 and matricula <= 200:
-        return "nevoa/02"
+        return "nevoa/2"
     elif matricula > 200 and matricula <= 300:
-        return "nevoa/03"
+        return "nevoa/3"
     elif matricula > 300 and matricula <= 400:
-        return "nevoa/04"
+        return "nevoa/4"
     elif matricula > 400 and matricula <= 500:
-        return "nevoa/05"
+        return "nevoa/5"
 
 broker = 'broker.hivemq.com'
 port = 3000
 
 matricula = obterMatricula()
 nevoa_se_conectar = nevoaConectar(matricula)
-
 client_id = f"cliente_{matricula}"
 lista_de_requisições = []
 
@@ -99,20 +97,20 @@ client.connect(broker)
 client.loop_start()
 
 # Topicos ouvindo
-client.subscribe("cliente/{matricula}")
+print(f"cliente/{matricula}")
+client.subscribe(f"cliente/{matricula}")
 
 client.on_connect = on_connect
 client.on_message = on_message
 
 login(matricula, nevoa_se_conectar)
 
-sleep(.5)
+sleep(2.5)
 
 dadosLogin = lista_de_requisições[0]
 lista_de_requisições.pop(0)
 
-if json.loads(dadosLogin['json'])['login'] == "sucesso":
-    sleep(0.5)
+if json.loads(json.loads(dadosLogin['json']))['login'] == "sucesso":
     while True:
         # Ficar esperando as mensagens chegar, e verificar - Chamar API dependendo do que veio
         # Mostrar mensagem que chegou na lista
@@ -124,30 +122,34 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
             rota = dados_requisicao["rota"]
             dadosJson = dados_requisicao["json"]
             
+            
             #print(f"metodo : {verboHTTP}, status : {status} , remetente : {remetente}, rota : {rota}, json : {dadosJson}")
             # Vericar os dados recebidos e mostrar em tela mensagens.
 
             if rota == "dadosHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
-                informacoesHidro = json.loads(dadosJson)
-                print(f"Consumo :  {informacoesHidro['consumoAtual']}")
-                print(f"Vazamento :  {informacoesHidro['vazamento']}")
+                dadosJson = json.loads(dadosJson)["1"]
+                informacoesHidro = dadosJson
+                print(f"\n\nConsumo :  {informacoesHidro['consumoAtual']}")
+                print(f"Vazamento :  {informacoesHidro['vazamento']}\n\n")
             elif rota == "historicoHidrometro/": # Historico do Hidrometro -> Referente a rota 02
-                informacoesHidro = json.loads(dadosJson)
-                print("Ultimas 5 informações do Hidrometro")
-                print(f" Consumo Atual :  {informacoesHidro['consumoAtual']}")
-                print(f" Consumo Anterior 01 :  {informacoesHidro['consumoAnterior01']}")
-                print(f" Consumo Anterior 02 :  {informacoesHidro['consumoAnterior02']}")
-                print(f" Consumo Anterior 03 :  {informacoesHidro['consumoAnterior03']}")
-                print(f" Consumo Anterior 04 :  {informacoesHidro['consumoAnterior04']}")
+                dadosJson = json.loads(dadosJson)["1"]
+                informacoesHidro = dadosJson
+                print("\n\nUltimas 5 informações do Hidrometro")
+                print(f" Consumo Atual :  {informacoesHidro['consumoAtual']} M³")
+                print(f" Consumo Anterior 01 :  {informacoesHidro['consumoAnterior01']} M³")
+                print(f" Consumo Anterior 02 :  {informacoesHidro['consumoAnterior02']} M³")
+                print(f" Consumo Anterior 03 :  {informacoesHidro['consumoAnterior03']} M³")
+                print(f" Consumo Anterior 04 :  {informacoesHidro['consumoAnterior04']} M³ \n\n")
             elif rota == "contaGerada/": # Gerar Conta -> Referente a rota 03
                 informacoesHidro = json.loads(dadosJson)
-                print(f" Valor a Pagar:  {informacoesHidro['contaPagar']}")
+                print(informacoesHidro)
+                print(f"\n\n Valor a Pagar:  {informacoesHidro['conta']}\n\n")
             elif rota == "contaPaga/": # Pagar Conta -> Referente a rota 04
                 informacoesHidro = json.loads(dadosJson)
-                print(f" Informação :  {informacoesHidro['contaPagar']}")
-            # client.publish(topic, msgEnviar)
+                print(f"\n\n Informação :  {informacoesHidro['conta']}\n\n")
 
             lista_de_requisições.pop(0)
         menu(client, matricula, nevoa_se_conectar)
+        sleep(2.5)
 
 client.loop_stop()

@@ -57,7 +57,8 @@ client.connect(broker)
 client.loop_start()
 
 # Topicos ouvindo 
-client.subscribe("nevoa/{numeroNevoa}")
+print(f"nevoa/{numeroNevoa}")
+client.subscribe(f"nevoa/{numeroNevoa}")
 
 client.on_connect = on_connect
 client.on_message = on_message
@@ -87,28 +88,28 @@ while True:
             # Pegar informações do Hidrometro
             elif rota == "verHistoricoHidrometro/": 
                 retorno = api.GET_pegarInformacoesHidro(dadosJson['matricula'])
-                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - historicoHidrometro/ - {retorno}", 1, False)
             # Gerar conta
             elif rota == "gerarConta/":
                 retorno = api.GET_GerarBoleto(dadosJson['matricula'])
-                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - contaGerada/ - {retorno}", 1, False)
             # ADm informações do Hidrometro especifico
             elif rota == "hidrometroEspecifico/":
                 retorno = api.GET_pegarInformacoesHidro(dadosJson['matricula'])
                 client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - hidroEspecifico/ - {retorno}", 1, False)
         elif verboHTTP == "POST":  
-            # Login Hidrometro
+            # Login Hidrometro 
             if rota == "loginHidrometro/":
                 retorno = api.POST_LoginHidrometro(dadosJson['matricula'])
                 client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
-            # Login Cliente
+            # Login Cliente =====================
             elif rota == "loginCliente/": 
                 retorno = api.POST_LoginCliente(dadosJson['matricula'])
                 client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
             # Pagar conta
             elif rota == "pagarConta/": 
-                retorno = api.GET_GerarBoleto(dadosJson['matricula'])
-                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
+                retorno = api.PUT_Pagarconta(dadosJson['matricula'])
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - contaPaga/ - {retorno}", 1, False)
         elif verboHTTP == "PUT":
             # Colocar dados do hidrometro
             if rota == "dadosHidrometro/": 
