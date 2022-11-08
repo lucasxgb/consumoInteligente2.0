@@ -1,8 +1,7 @@
 # Consumo de água inteligente - parte 2
 
-![Torneira pingando](https://img2.gratispng.com/20180417/yaq/kisspng-tap-water-bottled-water-stock-photography-water-drops-5ad611f0e7a3a3.3017185015239787369488.jpg 'Torneira')
 
-###TEC502 - Concorrência e Conectividade 
+##TEC502 - Concorrência e Conectividade 
 |Esse projeto foi desenvolvido por: 
 	- [Lucas Gabriel da Silva Lima Reis](https://github.com/lucasxgb)
 	- [Silas Silva Costa](https://github.com/silas-silva)
