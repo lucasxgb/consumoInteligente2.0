@@ -26,7 +26,7 @@ class Api:
             bloq = hidrometros[matricula.lower()]["bloqueado"]
             
             retorno = '{"login" : "sucesso", "consumoAtual" : "-", "bloqueado" : "_"}'.replace("-", str(consumoAtual)).replace("_", str(bloq))
-            return json.dumps(retorno) # Retornar validação existente e quanto o hidrometro consumiu até o momento
+            return retorno # Retornar validação existente e quanto o hidrometro consumiu até o momento
         
         else:
             # Adicionar novo hidrometro

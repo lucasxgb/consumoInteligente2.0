@@ -35,22 +35,27 @@ def on_message(client, userdata, msg):
 
 
 def login(matricula):
-    criarJson = '{"matricula":"-"}'.replace('-', matricula)
-    client.publish(nevoa_se_conectar, f"Post - 200 - hidrometro/{matricula} - loginHidrometro/ - {criarJson}", 1, False)
+    criarJson = '{"matricula":"-"}'.replace('-', str(matricula))
+    client.publish(nevoa_se_conectar, f"POST - 200 - hidrometro/{matricula} - loginHidrometro/ - {criarJson}", 1, False)
 
 
-def menu(client, matricula, vazao, consumo, ):
-    
-    escolha = random(1,2,3)
-
+def alterarVazao(vazao):
+    escolha = random.randint(1,3)
     # Se 3, mater a vazão
-
     if escolha == 1: # Aumentar vazão
-        if vazao <= 5:
+        if vazao < 5:
             vazao += 1
+            return vazao
+        else:
+            return vazao
     elif escolha == 2: # Diminuir vazão
-        if vazao >= 0:
+        if vazao > 0:
             vazao -= 1
+            return vazao
+        else:
+            return vazao
+    else:
+        return vazao
 
 
 def obterMatricula():
@@ -63,15 +68,15 @@ def obterMatricula():
 
 def nevoaConectar(matricula):
     if matricula > 0 and matricula <= 100:
-        return "nevoa/01"
+        return "nevoa/1"
     elif matricula > 100 and matricula <= 200:
-        return "nevoa/02"
+        return "nevoa/2"
     elif matricula > 200 and matricula <= 300:
-        return "nevoa/03"
+        return "nevoa/3"
     elif matricula > 300 and matricula <= 400:
-        return "nevoa/04"
+        return "nevoa/4"
     elif matricula > 400 and matricula <= 500:
-        return "nevoa/05"
+        return "nevoa/5"
 
 vazao = 0
 consumo = 0
@@ -91,17 +96,24 @@ client.connect(broker)
 client.loop_start()
 
 # Topicos ouvindo
-client.subscribe("hidrometro/{matricula}")
+client.subscribe(f"hidrometro/{matricula}")
 
 client.on_connect = on_connect
 client.on_message = on_message
 
 login(matricula)
 
-sleep(0.5)
+sleep(3.5)
 
 dadosLogin = lista_de_requisições[0]
 lista_de_requisições.pop(0)
+
+consumo = int(json.loads(dadosLogin['json'])['consumoAtual'])
+
+if json.loads(dadosLogin['json'])['bloqueado'] == "0":
+    bloqueado = False
+else:
+    bloqueado = True
 
 if json.loads(dadosLogin['json'])['login'] == "sucesso":
     while True:
@@ -123,23 +135,15 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
                 bloqueado = True
             elif rota == "desbloquearHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
                 bloqueado = False
-            elif rota == "login/":  # Dados do Hidrometro -> Referente a rota 01
-                if dadosJson['bloqueado'] == "0":
-                    bloqueado = False
-                else:
-                    bloqueado = True
-                consumo = dadosJson['consumo']
-                vazao = 1 
-            # client.publish(topic, msgEnviar)
             lista_de_requisições.pop(0)
         
-        menu()
-        sleep(1)
+        sleep(2.5)
 
-        if bloqueado == True:
+        if bloqueado == False:
+            vazao = alterarVazao(vazao)
             consumo += vazao
             
-        criarJson = '{"consumo" : "2", "matricula" : "3" : "vazamento" : "4"}'.replace("2",consumo).replace("3",matricula).replace("4",vazao)
+        criarJson = '{"consumo" : "2", "matricula" : "3", "vazamento" : "4"}'.replace("2",str(consumo)).replace("3",str(matricula)).replace("4",str(vazao))
         client.publish(nevoa_se_conectar, f"POST - 200 - hidrometro/{matricula} - dadosHidrometro/ - {criarJson}", 1, False)
 
 client.loop_stop()
