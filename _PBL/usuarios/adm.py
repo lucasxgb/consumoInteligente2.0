@@ -1,10 +1,9 @@
-# Hidrometro
+# Cliente
 
 import paho.mqtt.client as mqtt
 import json
 from threading import Thread
 from time import sleep
-import random
 
 """
     Topicos
@@ -34,23 +33,46 @@ def on_message(client, userdata, msg):
     lista_de_requisições.append(dic)
 
 
-def login(matricula):
-    criarJson = '{"matricula":"-"}'.replace('-', matricula)
-    client.publish(nuvem_se_conectar, f"Post - 200 - hidrometro/{matricula} - loginAdm/ - {criarJson}", 1, False)
+def nevoaConectar(matricula):
+    if matricula > 0 and matricula <= 100:
+        return "nevoa/01"
+    elif matricula > 100 and matricula <= 200:
+        return "nevoa/02"
+    elif matricula > 200 and matricula <= 300:
+        return "nevoa/03"
+    elif matricula > 300 and matricula <= 400:
+        return "nevoa/04"
+    elif matricula > 400 and matricula <= 500:
+        return "nevoa/05"
 
 
-def menu(client, matricula, vazao, consumo, ):
-    
-    escolha = random(1,2,3)
+def menuAux():
+    print('=' * 10, '{Bem vindo}', '=' * 10)
+    print('''Selecione a opção desejada
+           [1] - VER OS 10 HIDROMETROS COM MAIOR GASTO
+           [2] - PEGAR DADOS DE HIDROMETRO ESPECIFICO
+           [3] - BLOQUEAR HIDROMETRO
+           ''')
+    opt = int(input('Opção -> '))
+    return opt
 
-    # Se 3, mater a vazão
 
-    if escolha == 1: # Aumentar vazão
-        if vazao <= 5:
-            vazao += 1
-    elif escolha == 2: # Diminuir vazão
-        if vazao >= 0:
-            vazao -= 1
+def menu(client, nuvem_se_conectar):
+    # O cliente manda os dados para a nuvem
+    escolha = menuAux()
+    criarJson = '{"" : ""}'
+    if escolha == 1:
+        client.publish(nuvem_se_conectar, f"GET - 200 - adm/{matricula} - rankHidrometros/ - {criarJson}", 1, False)
+    elif escolha == 2:
+        matricula = int(input("Digite a matricula do Hidrometro: "))
+        criarJson = '{"matricula" : "-"}'.replace("-", matricula)
+        nevoa = nevoaConectar(matricula)
+        client.publish(nevoa, f"GET - 200 - adm/{matricula} - hidrometroEspecifico/ - {criarJson}", 1, False)
+    elif escolha == 3:
+        matricula = int(input("Digite a matricula do Hidrometro: "))
+        criarJson = '{"matricula" : "-"}'.replace("-", matricula)
+        nevoa = nevoaConectar(matricula)
+        client.publish(nevoa, f"PUT - 200 - adm/{matricula} - bloquearHidrometro/ - {criarJson}", 1, False)
 
 
 def obterMatricula():
@@ -61,29 +83,13 @@ def obterMatricula():
     return mat
 
 
-def nuvemConectar(matricula):
-    if matricula > 0 and matricula <= 100:
-        nuvem_se_conectar = "nuvem/01"
-    elif matricula > 100 and matricula <= 200:
-        nuvem_se_conectar = "nuvem/02"
-    elif matricula > 200 and matricula <= 300:
-        nuvem_se_conectar = "nuvem/03"
-    elif matricula > 300 and matricula <= 400:
-        nuvem_se_conectar = "nuvem/04"
-    elif matricula > 400 and matricula <= 500:
-        nuvem_se_conectar = "nuvem/05"
-
-vazao = 0
-consumo = 0
-bloqueado = 0
-
 broker = 'broker.hivemq.com'
 port = 3000
 
 matricula = obterMatricula()
-nuvem_se_conectar = nuvemConectar(matricula)
+nuvem_se_conectar = "nuvem"
 
-client_id = f"hidrometro_{matricula}"
+client_id = f"cliente_{matricula}"
 lista_de_requisições = []
 
 client = mqtt.Client(client_id)
@@ -91,56 +97,40 @@ client.connect(broker)
 client.loop_start()
 
 # Topicos ouvindo
-client.subscribe("hidrometro/{matricula}")
+client.subscribe("adm")
 
 client.on_connect = on_connect
 client.on_message = on_message
 
-login(matricula)
+sleep(.8)
 
-dadosHidro = sleep(0.5)
-
-dadosLogin = lista_de_requisições[0]
-lista_de_requisições.pop(0)
-
-if json.loads(dadosLogin['json'])['login'] == "sucesso":
-    while True:
-        # Ficar esperando as mensagens chegar, e verificar - Chamar API dependendo do que veio
-        # Mostrar mensagem que chegou na lista
-        for conexao in lista_de_requisições:
-            dados_requisicao = conexao
-            verboHTTP = dados_requisicao["metodo"]
-            status = dados_requisicao["status"]
-            remetente = dados_requisicao["remetente"]
-            rota = dados_requisicao["rota"]
-            dadosJson = json.loads(dados_requisicao["json"])
-            
-            #print(f"metodo : {verboHTTP}, status : {status} , remetente : {remetente}, rota : {rota}, json : {dadosJson}")
-
-            # Vericar os dados recebidos e alterar.
-
-            if rota == "bloquearHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
-                bloqueado = True
-            elif rota == "desbloquearHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
-                bloqueado = False
-            elif rota == "login/":  # Dados do Hidrometro -> Referente a rota 01
-                bloqueado = dadosJson['bloqueado']
-                consumo = dadosJson['consumo']
-                vazao = 1
-            
-            # client.publish(topic, msgEnviar)
-
-            lista_de_requisições.pop(0)
+while True:
+    # Ficar esperando as mensagens chegar, e verificar - Chamar API dependendo do que veio
+    # Mostrar mensagem que chegou na lista
+    for conexao in lista_de_requisições:
+        dados_requisicao = conexao
+        verboHTTP = dados_requisicao["metodo"]
+        status = dados_requisicao["status"]
+        remetente = dados_requisicao["remetente"]
+        rota = dados_requisicao["rota"]
+        dadosJson = dados_requisicao["json"]
         
-        menu()
+        #print(f"metodo : {verboHTTP}, status : {status} , remetente : {remetente}, rota : {rota}, json : {dadosJson}")
+        # Vericar os dados recebidos e mostrar em tela mensagens.
 
-        sleep(1)
-        
-        if bloqueado == True:
-            consumo += vazao
-        criarJson = '{"bloqueado" : "1", "consumo" : "2", "matricula" : "3"}'.replace("1",bloqueado).replace("2",consumo).replace("3",matricula)
-        client.publish(nuvem_se_conectar, f"POST - 200 - hidrometro/{matricula} - dadosHidrometro/ - {criarJson}", 1, False)
+        if rota == "rank/":  # Dados do Hidrometro -> Referente a rota 01
+            informacoesHidro = json.loads(dadosJson)
+            print(informacoesHidro)
+            
+        elif rota == "hidroEspecifico/": # Historico do Hidrometro -> Referente a rota 02
+            informacoesHidro = json.loads(dadosJson)
+            print(informacoesHidro)
+            
+        elif rota == "bloquearHidro/": # Gerar Conta -> Referente a rota 03
+            informacoesHidro = json.loads(dadosJson)
+            print(informacoesHidro)
 
-
+        lista_de_requisições.pop(0)
+    menu(client, matricula, nuvem_se_conectar)
 
 client.loop_stop()

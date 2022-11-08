@@ -1,14 +1,16 @@
-import json
-
+# Nuvem
 import paho.mqtt.client as mqtt
+import json
 from threading import Thread
 from time import sleep
+import random
+from apiNuvem import Api
 
-broker = 'broker.hivemq.com'
-port = 3000
-client_id = 'servidor'
+"""
+    Topicos
+        nevoa/id/hidrometros/id
+"""
 
-lista_de_requisições = []
 
 def on_connect(client, userdata, flags, rc):
     """ Função para verificar o status da conexão
@@ -26,70 +28,54 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     # Colocar dados de mensagem em um dicionario e colocar em fila para tratar
     dados = str(msg.payload.decode("utf-8")).split(" - ")
-    
-    print(f"metodo: {dados[0]} - status: {dados[1]} - topico: {dados[2]} - remetente: {dados[3]} - rota: {dados[4]} - msg: {dados[5]}")
-    
-    dic = {"metodo" : dados[0], "status" : dados[1] ,"topico" : dados[2], "remetente" : dados[3], "rota" : dados[4], "msg" : dados[5]}
+
+    dic = {"metodo" : dados[0], "status" : dados[1] , "remetente" : dados[2], "rota" : dados[3], "json" : dados[4]}
+    print(dic)
     lista_de_requisições.append(dic)
+ 
 
+api = Api()
 
-client = mqtt.Client("teste")
+broker = 'broker.hivemq.com'
+port = 3000
+
+client_id = f"nuvem"
+lista_de_requisições = []
+
+client = mqtt.Client(client_id)
 client.connect(broker)
 client.loop_start()
 
-# Topicos ouvindo
+# Topicos ouvindo 
 client.subscribe("nuvem")
-client.subscribe("adm")
-client.subscribe("cliente")
 
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.publish("nevoa/01", f"GET - 700 - nevoa/01 - nevoa - nevoa conectada ao servidor", 1, False)
-
-cont = 100
+dadosHidro = sleep(0.8)
 
 while True:
-    # Ficar esperando as mensagens chegar, e verificar - Chamar API dependendo     
-
-    cont += 100
+    # Ficar esperando as mensagens chegar, e verificar   
+    # Mostrar mensagem que chegou na lista
     for conexao in lista_de_requisições:
-        dados_requisicao = conexao  
-        
+        dados_requisicao = conexao
         verboHTTP = dados_requisicao["metodo"]
         status = dados_requisicao["status"]
         remetente = dados_requisicao["remetente"]
-        msg = dados_requisicao["msg"]
-        topicoRemetente = dados_requisicao["topico"]
         rota = dados_requisicao["rota"]
+        dadosJson = json.loads(dados_requisicao["json"])
         
-        print(f"metodo: {verboHTTP}, status: {status} , topico: {topicoRemetente}, remetente: {remetente}, rota: {rota}, msg: {msg}")
-        
-        ## API aqui
-        # client.publish(topic, msgEnviar)
-        
-        #client.publish("nevoa/01", f"GET - {cont} - nevoa/01 - nevoa - fazer_tal_coisa - nevoa conectada ao servidor", 1, False)
-
-        if remetente == "hidrometro":
-            # receber dados do hidrometro, e salvar no banco
-            pass
-        elif remetente == "servidor":
-            # receber dados do hidrometro, e mandar resposta
-            pass
-        elif remetente == "cliente":
-            mensagem = msg.split('/')
-            print(mensagem)
-            rota = mensagem[0]
-            matricula = mensagem[1]
-            if verboHTTP == 'GET':
-                if rota == "GET_hidrometroEspecifico":
-                    client.publish("cliente", f"GET - 200 - nevoa/01/# - cliente - pegarHidrometroEspecifico - GET_hidrometroEspecifico/{matricula}", 1, False)
-
-        elif remetente == "adm":
-            # receber dados do adm, e mandar resposta
+        if verboHTTP == "GET":
+           if rota == "rankHidrometros/": 
+                retorno = api.rank10()
+                client.publish(remetente, f"GET - 200 - nuvem - dadosHidrometro/ - {retorno}", 1, False)
+        elif verboHTTP == "POST":  
+           pass
+        elif verboHTTP == "PUT":
             pass
             
+        
+        
         lista_de_requisições.pop(0)
-    
 
 client.loop_stop()
