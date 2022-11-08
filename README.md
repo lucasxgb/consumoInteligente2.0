@@ -24,7 +24,7 @@
 		- Código de Lucas - [ConsumoInteligente](https://github.com/lucasxgb/consumoInteligente 'Lucas'),	
 		- Código de Silas - [redeControleAgua](https://github.com/silas-silva/rede_controle_agua_SOCKET 'Silas')
 
-Foi solicitado a nós da equipe de desenvolvimento a continuação desse trabalho, agora porém era nescessário....
+- Foi solicitado a nós da equipe de desenvolvimento a continuação desse trabalho, agora porém é necessário a mudança para um modelo de servidor descentralizado,no qual os computadores conectados ao sitema funcionam também como servidores (Infomoney 2022). Onde ao invés de realizar todo processamento de informações na nuvem ou servidor principal, as informações de menor prioridade, ou que não exigem conhecimento de todos os dados do sitema sempre serão tratados na névoa que está mais próxima ao usuário.
 	
 ## Metodologia
 `Funcionalidade 1`: descrição da funcionalidade 1
@@ -32,5 +32,7 @@ Foi solicitado a nós da equipe de desenvolvimento a continuação desse trabalh
 ## Resultados
 
 ## Conclusões
-https://blog.feabhas.com/2020/02/running-the-eclipse-mosquitto-mqtt-broker-in-a-docker-container/
-https://www.digitalocean.com/community/questions/how-to-setup-a-mosquitto-mqtt-server-and-receive-data-from-owntracks
+
+## Referências: 
+Infomoney. "O que é Peer - to- Peer(P2P)".https://blog.feabhas.com/2020/02/running-the-eclipse-mosquitto-mqtt-broker-in-a-docker-container/
+https://www.digitalocean.com/community/questions/how-to-setup-a-mosquitto-mqtt-server-and-receive-data-from-owntracks. Acesso em 18 de Out de 2022.
