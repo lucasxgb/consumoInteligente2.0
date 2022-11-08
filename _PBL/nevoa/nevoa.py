@@ -1,10 +1,10 @@
 # Hidrometro
-
 import paho.mqtt.client as mqtt
 import json
 from threading import Thread
 from time import sleep
 import random
+from apiNevoa import Api
 
 """
     Topicos
@@ -30,7 +30,7 @@ def on_message(client, userdata, msg):
     dados = str(msg.payload.decode("utf-8")).split(" - ")
 
     dic = {"metodo" : dados[0], "status" : dados[1] , "remetente" : dados[2], "rota" : dados[3], "json" : dados[4]}
-    
+    print(dic)
     lista_de_requisições.append(dic)
  
 
@@ -41,6 +41,7 @@ def DefinirNumeroNevoa():
     num = int(num)
     return num
 
+api = Api()
 
 broker = 'broker.hivemq.com'
 port = 3000
@@ -56,7 +57,7 @@ client.connect(broker)
 client.loop_start()
 
 # Topicos ouvindo 
-client.subscribe("hidrometro/#")
+client.subscribe("nevoa/{numeroNevoa}")
 
 client.on_connect = on_connect
 client.on_message = on_message
@@ -79,18 +80,44 @@ while True:
         # Vericar os dados recebidos e alterar.
 
         if verboHTTP == "GET":
-            # 
-            pass
+            # Pegar informações do Hidrometro
+            if rota == "pegarHidrometroEspecifico/": 
+                retorno = api.GET_pegarInformacoesHidro(dadosJson['matricula'])
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
+            # Pegar informações do Hidrometro
+            elif rota == "verHistoricoHidrometro/": 
+                retorno = api.GET_pegarInformacoesHidro(dadosJson['matricula'])
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
+            # Gerar conta
+            elif rota == "gerarConta/":
+                retorno = api.GET_GerarBoleto(dadosJson['matricula'])
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
+            # ADm informações do Hidrometro especifico
+            elif rota == "hidrometroEspecifico/":
+                retorno = api.GET_pegarInformacoesHidro(dadosJson['matricula'])
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - hidroEspecifico/ - {retorno}", 1, False)
         elif verboHTTP == "POST":  
-            # Colocar dados do hidrometro
             # Login Hidrometro
-                # Fazendo
+            if rota == "loginHidrometro/":
+                retorno = api.POST_LoginHidrometro(dadosJson['matricula'])
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
             # Login Cliente
-            pass
+            elif rota == "loginCliente/": 
+                retorno = api.POST_LoginCliente(dadosJson['matricula'])
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
+            # Pagar conta
+            elif rota == "pagarConta/": 
+                retorno = api.GET_GerarBoleto(dadosJson['matricula'])
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
         elif verboHTTP == "PUT":
-            pass
-        elif verboHTTP == "DELETE":
-            pass  
+            # Colocar dados do hidrometro
+            if rota == "dadosHidrometro/": 
+                retorno = api.PUT_novoConsumo(dadosJson['matricula'], dadosJson['consumo'], dadosJson['vazamento'])
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
+            # Adm bloquear hidrometro
+            elif rota == "bloquearHidrometro/": 
+                retorno = api.PUT_bloquear_hidrometro(dadosJson['matricula'])
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - bloquearHidro/ - {retorno}", 1, False)
         
         lista_de_requisições.pop(0)
 

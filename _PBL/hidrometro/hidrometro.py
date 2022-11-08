@@ -63,15 +63,15 @@ def obterMatricula():
 
 def nevoaConectar(matricula):
     if matricula > 0 and matricula <= 100:
-        nevoa_se_conectar = "nevoa/01"
+        return "nevoa/01"
     elif matricula > 100 and matricula <= 200:
-        nevoa_se_conectar = "nevoa/02"
+        return "nevoa/02"
     elif matricula > 200 and matricula <= 300:
-        nevoa_se_conectar = "nevoa/03"
+        return "nevoa/03"
     elif matricula > 300 and matricula <= 400:
-        nevoa_se_conectar = "nevoa/04"
+        return "nevoa/04"
     elif matricula > 400 and matricula <= 500:
-        nevoa_se_conectar = "nevoa/05"
+        return "nevoa/05"
 
 vazao = 0
 consumo = 0
@@ -138,13 +138,8 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
 
         if bloqueado == True:
             consumo += vazao
-            bloqueadoMandar = "1"
-        else:
-            bloqueadoMandar = "0"
             
-        criarJson = '{"bloqueado" : "1", "consumo" : "2", "matricula" : "3"}'.replace("1",bloqueadoMandar).replace("2",consumo).replace("3",matricula)
+        criarJson = '{"consumo" : "2", "matricula" : "3" : "vazamento" : "4"}'.replace("2",consumo).replace("3",matricula).replace("4",vazao)
         client.publish(nevoa_se_conectar, f"POST - 200 - hidrometro/{matricula} - dadosHidrometro/ - {criarJson}", 1, False)
-
-
 
 client.loop_stop()

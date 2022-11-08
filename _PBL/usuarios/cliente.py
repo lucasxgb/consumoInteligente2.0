@@ -33,9 +33,10 @@ def on_message(client, userdata, msg):
     lista_de_requisições.append(dic)
 
 
-def login(matricula):
-    criarJson = '{"matricula":"-"}'.replace('-', matricula)
-    client.publish(nevoa_se_conectar, f"Post - 200 - cliente/{matricula} - loginCliente - {criarJson}", 1, False)
+def login(matricula, nevoa_se_conectar):
+    criarJson = '{"matricula":"-"}'.replace('-', str(matricula))
+    print(nevoa_se_conectar)
+    client.publish(nevoa_se_conectar, f"POST - 200 - cliente/{matricula} - loginCliente/ - {criarJson}", 1, False)
 
 
 def menuAux():
@@ -50,19 +51,19 @@ def menuAux():
     return opt
 
 
-def menu(client, matricula):
+def menu(client, matricula, nevoa_se_conectar):
     # O cliente manda os dados para a nevoa
     escolha = menuAux()
-    criarJson = '{"" : ""}'
+    criarJson = '{"matricula" : "-"}'.replace("-", matricula)
     if escolha == 1:
-        client.publish(nevoa_se_conectar, f"GET - 200 - cliente/{matricula} - pegarHidrometroEspecifico/{matricula} - {criarJson}", 1, False)
+        client.publish(nevoa_se_conectar, f"GET - 200 - cliente/{matricula} - pegarHidrometroEspecifico/ - {criarJson}", 1, False)
     elif escolha == 2:
-        client.publish(nevoa_se_conectar, f"GET - 200 - cliente/{matricula} - verHistoricoHidrômetro/{matricula} - {criarJson}", 1, False)
+        client.publish(nevoa_se_conectar, f"GET - 200 - cliente/{matricula} - verHistoricoHidrometro/ - {criarJson}", 1, False)
     elif escolha == 3:
-        client.publish(nevoa_se_conectar, f"GET - 200 - cliente/{matricula} - gerarConta/{matricula} - {criarJson}", 1, False)
+        client.publish(nevoa_se_conectar, f"GET - 200 - cliente/{matricula} - gerarConta/ - {criarJson}", 1, False)
     elif escolha == 4:
-        criarJson = '{"matricula" : "-"}'.replace("-", matricula)
         client.publish(nevoa_se_conectar, f"POST - 200 - cliente/{matricula} - pagarConta/ - {criarJson}", 1, False)
+
 
 def obterMatricula():
     mat = input('Informe a matricula do seu hidrômetro -> ')
@@ -74,15 +75,15 @@ def obterMatricula():
 
 def nevoaConectar(matricula):
     if matricula > 0 and matricula <= 100:
-        nevoa_se_conectar = "nevoa/01"
+        return "nevoa/01"
     elif matricula > 100 and matricula <= 200:
-        nevoa_se_conectar = "nevoa/02"
+        return "nevoa/02"
     elif matricula > 200 and matricula <= 300:
-        nevoa_se_conectar = "nevoa/03"
+        return "nevoa/03"
     elif matricula > 300 and matricula <= 400:
-        nevoa_se_conectar = "nevoa/04"
+        return "nevoa/04"
     elif matricula > 400 and matricula <= 500:
-        nevoa_se_conectar = "nevoa/05"
+        return "nevoa/05"
 
 broker = 'broker.hivemq.com'
 port = 3000
@@ -103,9 +104,9 @@ client.subscribe("cliente/{matricula}")
 client.on_connect = on_connect
 client.on_message = on_message
 
-login(matricula)
+login(matricula, nevoa_se_conectar)
 
-sleep(0.5)
+sleep(.5)
 
 dadosLogin = lista_de_requisições[0]
 lista_de_requisições.pop(0)
@@ -128,27 +129,25 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
 
             if rota == "dadosHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
                 informacoesHidro = json.loads(dadosJson)
-                print(f"Vazão :  {informacoesHidro['vazao']}")
-                print(f"Metros Cubicos Gastos :  {informacoesHidro['MCGastos']}")
-                print(f"Vazamento :  {informacoesHidro['vazamento']}")
+                print(f"Consumo :  {informacoesHidro['consumoAtual']}")
                 print(f"Vazamento :  {informacoesHidro['vazamento']}")
             elif rota == "historicoHidrometro/": # Historico do Hidrometro -> Referente a rota 02
                 informacoesHidro = json.loads(dadosJson)
                 print("Ultimas 5 informações do Hidrometro")
-                print(f" Vazão Atual :  {informacoesHidro['info01']}")
-                print(f" Vazão Anterior 01 :  {informacoesHidro['info02']}")
-                print(f" Vazão Anterior 02 :  {informacoesHidro['info03']}")
-                print(f" Vazão Anterior 03 :  {informacoesHidro['info04']}")
-                print(f" Vazão Anterior 04 :  {informacoesHidro['info05']}")
+                print(f" Consumo Atual :  {informacoesHidro['consumoAtual']}")
+                print(f" Consumo Anterior 01 :  {informacoesHidro['consumoAnterior01']}")
+                print(f" Consumo Anterior 02 :  {informacoesHidro['consumoAnterior02']}")
+                print(f" Consumo Anterior 03 :  {informacoesHidro['consumoAnterior03']}")
+                print(f" Consumo Anterior 04 :  {informacoesHidro['consumoAnterior04']}")
             elif rota == "contaGerada/": # Gerar Conta -> Referente a rota 03
                 informacoesHidro = json.loads(dadosJson)
-                print(f" Valor a Pagar:  {informacoesHidro['valorPagar']}")
+                print(f" Valor a Pagar:  {informacoesHidro['contaPagar']}")
             elif rota == "contaPaga/": # Pagar Conta -> Referente a rota 04
                 informacoesHidro = json.loads(dadosJson)
-                print(f" Informação :  {informacoesHidro['contaPaga']}")
+                print(f" Informação :  {informacoesHidro['contaPagar']}")
             # client.publish(topic, msgEnviar)
 
             lista_de_requisições.pop(0)
-        menu()
+        menu(client, matricula, nevoa_se_conectar)
 
 client.loop_stop()
