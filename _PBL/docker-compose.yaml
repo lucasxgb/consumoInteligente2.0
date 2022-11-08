@@ -3,9 +3,11 @@ services:
    mosquitto:
     image: eclipse-mosquitto
     container_name: mosquitto
+    ports:
+      - 3000:3000  
     volumes:
       - ./docker-mosquitto/mosquitto/config:/mosquitto/config/
       - ./docker-mosquitto/mosquitto/data:/mosquitto/data/
       - ./docker-mosquitto/mosquitto/log:/mosquitto/log/
-    ports:
-      - 3000:3000  
+    
+    

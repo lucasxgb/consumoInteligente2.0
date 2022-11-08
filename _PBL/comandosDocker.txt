@@ -11,6 +11,9 @@ docker pull eclipse-mosquitto
 # Comandos Meu projeto
     # Push
         docker push nome-docker-hub/image:versao 
+
+    #   Docker 
+        docker build --rm -t lucasxgb/compose-image:v1 -f Dockerfile .
         
     # Nevoa
         docker build --rm -t lucasxgb/nevoa-image:v1 -f Dockerfile .
