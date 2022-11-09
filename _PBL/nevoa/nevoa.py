@@ -101,7 +101,7 @@ while True:
             # Login Hidrometro 
             if rota == "loginHidrometro/":
                 retorno = api.POST_LoginHidrometro(dadosJson['matricula'])
-                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
+                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - loginHidrometro/ - {retorno}", 1, False)
             # Login Cliente =====================
             elif rota == "loginCliente/": 
                 retorno = api.POST_LoginCliente(dadosJson['matricula'])
@@ -110,6 +110,7 @@ while True:
             elif rota == "pagarConta/": 
                 retorno = api.PUT_Pagarconta(dadosJson['matricula'])
                 client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - contaPaga/ - {retorno}", 1, False)
+                client.publish(f"hidrometro/{dadosJson['matricula']}", f"GET - 200 - nevoa/{numeroNevoa} - desbloquearHidrometro/ - {retorno}", 1, False)
         elif verboHTTP == "PUT":
             # Colocar dados do hidrometro
             if rota == "dadosHidrometro/": 
@@ -119,7 +120,8 @@ while True:
             elif rota == "bloquearHidrometro/": 
                 retorno = api.PUT_bloquear_hidrometro(dadosJson['matricula'])
                 client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - bloquearHidro/ - {retorno}", 1, False)
-        
+                client.publish(f"hidrometro/{dadosJson['matricula']}", f"GET - 200 - nevoa/{numeroNevoa} - bloquearHidrometro/ - {retorno}", 1, False)
+            
         lista_de_requisições.pop(0)
 
 client.loop_stop()

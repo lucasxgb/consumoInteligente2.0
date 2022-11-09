@@ -35,15 +35,15 @@ def on_message(client, userdata, msg):
 
 def nevoaConectar(matricula):
     if matricula > 0 and matricula <= 100:
-        return "nevoa/01"
+        return "nevoa/1"
     elif matricula > 100 and matricula <= 200:
-        return "nevoa/02"
+        return "nevoa/2"
     elif matricula > 200 and matricula <= 300:
-        return "nevoa/03"
+        return "nevoa/3"
     elif matricula > 300 and matricula <= 400:
-        return "nevoa/04"
+        return "nevoa/4"
     elif matricula > 400 and matricula <= 500:
-        return "nevoa/05"
+        return "nevoa/5"
 
 
 def menuAux():
@@ -62,34 +62,25 @@ def menu(client, nuvem_se_conectar):
     escolha = menuAux()
     criarJson = '{"" : ""}'
     if escolha == 1:
-        client.publish(nuvem_se_conectar, f"GET - 200 - adm/{matricula} - rankHidrometros/ - {criarJson}", 1, False)
+        client.publish(nuvem_se_conectar, f"GET - 200 - adm - rankHidrometros/ - {criarJson}", 1, False)
     elif escolha == 2:
         matricula = int(input("Digite a matricula do Hidrometro: "))
-        criarJson = '{"matricula" : "-"}'.replace("-", matricula)
+        criarJson = '{"matricula" : "-"}'.replace("-", str(matricula))
         nevoa = nevoaConectar(matricula)
-        client.publish(nevoa, f"GET - 200 - adm/{matricula} - hidrometroEspecifico/ - {criarJson}", 1, False)
+        client.publish(nevoa, f"GET - 200 - adm - hidrometroEspecifico/ - {criarJson}", 1, False)
     elif escolha == 3:
         matricula = int(input("Digite a matricula do Hidrometro: "))
-        criarJson = '{"matricula" : "-"}'.replace("-", matricula)
+        criarJson = '{"matricula" : "-"}'.replace("-", str(matricula))
         nevoa = nevoaConectar(matricula)
-        client.publish(nevoa, f"PUT - 200 - adm/{matricula} - bloquearHidrometro/ - {criarJson}", 1, False)
-
-
-def obterMatricula():
-    mat = input('Informe a matricula do seu hidrômetro -> ')
-    while mat == "": # Colocar um validador para garantir que seja apenas um numero
-        mat = input('Informe uma matricula valida -> ')
-    mat = int(mat)
-    return mat
+        client.publish(nevoa, f"PUT - 200 - adm - bloquearHidrometro/ - {criarJson}", 1, False)
 
 
 broker = 'broker.hivemq.com'
 port = 3000
 
-matricula = obterMatricula()
 nuvem_se_conectar = "nuvem"
 
-client_id = f"cliente_{matricula}"
+client_id = f"adm"
 lista_de_requisições = []
 
 client = mqtt.Client(client_id)
@@ -124,13 +115,23 @@ while True:
             
         elif rota == "hidroEspecifico/": # Historico do Hidrometro -> Referente a rota 02
             informacoesHidro = json.loads(dadosJson)
-            print(informacoesHidro)
-            
+            print(f"\n\nConsumo: {informacoesHidro['1']['consumoAtual']} M³")
+            print(f"Devendo: {informacoesHidro['1']['contaPagar']} R$")
+            if informacoesHidro['1']['vazamento'] == "0":
+                print("Vazamento: Não tem")
+            else:
+                print("Vazamento: Existente")
+            if informacoesHidro['1']['bloqueado'] == "0":
+                print("Bloqueado: Não\n\n")
+            else:
+                print("Bloqueado: Sim\n\n")
+
         elif rota == "bloquearHidro/": # Gerar Conta -> Referente a rota 03
             informacoesHidro = json.loads(dadosJson)
             print(informacoesHidro)
 
         lista_de_requisições.pop(0)
-    menu(client, matricula, nuvem_se_conectar)
+    menu(client, nuvem_se_conectar)
+    sleep(2.5)
 
 client.loop_stop()

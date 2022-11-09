@@ -64,6 +64,7 @@ def menu(client, matricula, nevoa_se_conectar):
         client.publish(nevoa_se_conectar, f"POST - 200 - cliente/{matricula} - pagarConta/ - {criarJson}", 1, False)
 
 
+
 def obterMatricula():
     mat = input('Informe a matricula do seu hidrômetro -> ')
     while mat == "": # Colocar um validador para garantir que seja apenas um numero
