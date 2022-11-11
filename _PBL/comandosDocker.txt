@@ -13,7 +13,12 @@ docker pull eclipse-mosquitto
         docker push nome-docker-hub/image:versao 
 
     #   Docker 
-        docker build --rm -t lucasxgb/compose-image:v1 -f Dockerfile .
+        #rodar esses três comandos 
+        docker build --rm -t lucasxgb/mosquitto-image:v1 -f Dockerfile .
+        docker run -it -t -p 3000:3000 --name mosquitto-container lucasxgb/mosquitto-image:v1
+        sudo mosquitto -c config/mosquitto.conf
+        
+        docker run -it -t --name mosquitto-container lucasxgb/mosquitto-image:v1
         
     # Nevoa
         docker build --rm -t lucasxgb/nevoa-image:v1 -f Dockerfile .
