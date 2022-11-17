@@ -83,7 +83,7 @@ consumo = 0
 bloqueado = 0
 media = 0
 
-broker = 'broker.hivemq.com'
+broker = '172.16.103.3'
 port = 3000
 
 matricula = obterMatricula()
@@ -93,7 +93,7 @@ client_id = f"hidrometro_{matricula}"
 lista_de_requisições = []
 
 client = mqtt.Client(client_id)
-client.connect(broker)
+client.connect(broker, port)
 client.loop_start()
 
 # Topicos ouvindo

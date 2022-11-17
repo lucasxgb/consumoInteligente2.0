@@ -85,7 +85,7 @@ def nevoaConectar(matricula):
     elif matricula > 400 and matricula <= 500:
         return "nevoa/5"
 
-broker = 'broker.hivemq.com'
+broker = '172.16.103.3'
 port = 3000
 
 matricula = obterMatricula()
@@ -94,7 +94,7 @@ client_id = f"cliente_{matricula}"
 lista_de_requisições = []
 
 client = mqtt.Client(client_id)
-client.connect(broker)
+client.connect(broker, port)
 client.loop_start()
 
 # Topicos ouvindo

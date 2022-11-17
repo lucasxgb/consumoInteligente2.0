@@ -62,7 +62,7 @@ def menu(client, nuvem_se_conectar):
         client.publish(nuvem_se_conectar, f"PUT - 200 - adm - bloquearHidrometro/ - {criarJson}", 1, False)
 
 
-broker = 'broker.hivemq.com'
+broker = '172.16.103.3'
 port = 3000
 
 nuvem_se_conectar = "nuvem"
@@ -71,7 +71,7 @@ client_id = f"adm"
 lista_de_requisições = []
 
 client = mqtt.Client(client_id)
-client.connect(broker)
+client.connect(broker, port)
 client.loop_start()
 
 # Topicos ouvindo

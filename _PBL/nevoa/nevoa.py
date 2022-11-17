@@ -43,7 +43,7 @@ def DefinirNumeroNevoa():
 
 api = Api()
 
-broker = 'broker.hivemq.com'
+broker = '172.16.103.3'
 port = 3000
 
 numeroNevoa = DefinirNumeroNevoa()
@@ -53,7 +53,7 @@ client_id = f"nevoa_{numeroNevoa}"
 lista_de_requisições = []
 
 client = mqtt.Client(client_id)
-client.connect(broker)
+client.connect(broker, port)
 client.loop_start()
 
 # Topicos ouvindo 

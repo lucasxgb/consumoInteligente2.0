@@ -47,14 +47,14 @@ def on_message(client, userdata, msg):
  
 api = Api()
 
-broker = 'broker.hivemq.com'
+broker = '172.16.103.3'
 port = 3000
 
 client_id = f"nuvem"
 lista_de_requisições = []
 
 client = mqtt.Client(client_id)
-client.connect(broker)
+client.connect(broker, port)
 client.loop_start()
 
 # Topicos ouvindo 
