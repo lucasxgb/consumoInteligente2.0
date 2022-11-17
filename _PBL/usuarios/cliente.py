@@ -85,7 +85,7 @@ def nevoaConectar(matricula):
     elif matricula > 400 and matricula <= 500:
         return "nevoa/5"
 
-broker = '172.16.103.3'
+broker = '127.0.0.1'
 port = 3000
 
 matricula = obterMatricula()

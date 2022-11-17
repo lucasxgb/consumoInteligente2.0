@@ -62,7 +62,7 @@ def menu(client, nuvem_se_conectar):
         client.publish(nuvem_se_conectar, f"PUT - 200 - adm - bloquearHidrometro/ - {criarJson}", 1, False)
 
 
-broker = '172.16.103.3'
+broker = '127.0.0.1'
 port = 3000
 
 nuvem_se_conectar = "nuvem"

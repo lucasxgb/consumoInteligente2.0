@@ -47,7 +47,7 @@ def on_message(client, userdata, msg):
  
 api = Api()
 
-broker = '172.16.103.3'
+broker = '127.0.0.1'
 port = 3000
 
 client_id = f"nuvem"
@@ -103,12 +103,12 @@ while True:
                 client.publish("nevoa",f'GET - 200 - nuvem - rankHidrometros/ - {json.dumps(dadosJson)}', 1, False)
             # Pegar dados de hidrometro especifico
             elif rota == "hidrometroEspecifico/":
-                nevoa = obterNevoa(dadosJson['matricula'])
+                nevoa = obterNevoa(int(dadosJson['matricula']))
                 client.publish(nevoa, f"GET - 200 - nuvem - hidrometroEspecifico/ - {json.dumps(dadosJson)}", 1, False)
         elif verboHTTP == "PUT":
             # Pegar dados de hidrometro especifico
             if rota == "bloquearHidrometro/": 
-                nevoa = obterNevoa(dadosJson['matricula'])
+                nevoa = obterNevoa(int(dadosJson['matricula']))
                 client.publish(nevoa, f"GET - 200 - nuvem - bloquearHidrometro/ - {json.dumps(dadosJson)}", 1, False)
         elif verboHTTP == "POST":
             if rota == "rankHidrometros/":

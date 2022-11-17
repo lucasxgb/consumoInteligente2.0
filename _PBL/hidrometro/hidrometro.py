@@ -83,7 +83,7 @@ consumo = 0
 bloqueado = 0
 media = 0
 
-broker = '172.16.103.3'
+broker = '127.0.0.1'
 port = 3000
 
 matricula = obterMatricula()
@@ -140,13 +140,11 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
             elif rota == "desbloquearHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
                 bloqueado = False
             elif rota == "media/":
-                print(dadosJson)
                 media = float(dadosJson['media'])
             lista_de_requisições.pop(0)
         
         sleep(2.5) 
         
-        #print(f"Media: {media}")
         if consumo <= media:
             if bloqueado == False:
                 vazao = alterarVazao(vazao)
