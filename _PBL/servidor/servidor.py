@@ -47,7 +47,7 @@ def on_message(client, userdata, msg):
  
 api = Api()
 
-broker = '127.0.0.1'
+broker = '172.16.103.3'
 port = 3000
 
 client_id = f"nuvem"

@@ -83,7 +83,7 @@ consumo = 0
 bloqueado = 0
 media = 0
 
-broker = '127.0.0.1'
+broker = '172.16.103.3'
 port = 3000
 
 matricula = obterMatricula()
