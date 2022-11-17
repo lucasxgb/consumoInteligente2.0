@@ -6,11 +6,6 @@ from time import sleep
 import random
 from apiNevoa import Api
 
-"""
-    Topicos
-        nevoa/id/hidrometros/id
-"""
-
 
 def on_connect(client, userdata, flags, rc):
     """ Função para verificar o status da conexão

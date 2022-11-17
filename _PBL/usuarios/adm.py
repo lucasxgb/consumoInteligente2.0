@@ -5,11 +5,6 @@ import json
 from threading import Thread
 from time import sleep
 
-"""
-    Topicos
-        nevoa/id/hidrometros/id
-"""
-
 
 def on_connect(client, userdata, flags, rc):
     """ Função para verificar o status da conexão

@@ -6,11 +6,6 @@ from threading import Thread
 from time import sleep
 import random
 
-"""
-    Topicos
-        nevoa/id/hidrometros/id
-"""
-
 
 def on_connect(client, userdata, flags, rc):
     """ Função para verificar o status da conexão
@@ -151,8 +146,13 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
                 consumo += vazao
             else:
                 vazao = 0
+        
+        vazamento = 0
 
-        criarJson = '{"consumo" : "-", "matricula" : "_", "vazamento" : "|"}'.replace("-",str(consumo)).replace("_",str(matricula)).replace("|",str(vazao))
+        if vazao == 0:
+            vazamento = 1
+
+        criarJson = '{"consumo" : "-", "matricula" : "_", "vazamento" : "|"}'.replace("-",str(consumo)).replace("_",str(matricula)).replace("|",str(vazamento))
         client.publish(nevoa_se_conectar, f"POST - 200 - hidrometro/{matricula} - dadosHidrometro/ - {criarJson}", 1, False)
 
 client.loop_stop()

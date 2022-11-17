@@ -6,10 +6,6 @@ from time import sleep
 import random
 from apiNuvem import Api
 
-"""
-    Topicos
-        nevoa/id/hidrometros/id
-"""
 
 def obterNevoa(matricula):
     if matricula > 0 and matricula <= 100:
