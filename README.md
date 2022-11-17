@@ -40,3 +40,6 @@
 ## Referências: 
 ***Infomoney. "O que é Peer - to- Peer(P2P)".https://blog.feabhas.com/2020/02/running-the-eclipse-mosquitto-mqtt-broker-in-a-docker-container/
 https://www.digitalocean.com/community/questions/how-to-setup-a-mosquitto-mqtt-server-and-receive-data-from-owntracks. Acesso em 18 de Out de 2022.***
+
+***Steve. "MQTT and Python For Beginners -Tutorials".[https://blog.feabhas.com/2020/02/running-the-eclipse-mosquitto-mqtt-broker-in-a-docker-container/
+https://www.digitalocean.com/community/questions/how-to-setup-a-mosquitto-mqtt-server-and-receive-data-from-owntracks.](http://www.steves-internet-guide.com/mqtt-python-beginners-course/) Acesso em 18 de Out de 2022.***
