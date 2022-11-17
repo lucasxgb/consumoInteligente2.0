@@ -59,6 +59,8 @@ client.loop_start()
 # Topicos ouvindo 
 print(f"nevoa/{numeroNevoa}")
 client.subscribe(f"nevoa/{numeroNevoa}")
+client.subscribe(f"nevoa")
+
 
 client.on_connect = on_connect
 client.on_message = on_message
@@ -96,7 +98,15 @@ while True:
             # ADm informações do Hidrometro especifico
             elif rota == "hidrometroEspecifico/":
                 retorno = api.GET_pegarInformacoesHidro(dadosJson['matricula'])
-                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - hidroEspecifico/ - {retorno}", 1, False)
+                client.publish("adm", f"GET - 200 - nevoa/{numeroNevoa} - hidroEspecifico/ - {retorno}", 1, False)
+            # Nuvem, pegar rank de N hidrometros com mais gasto
+            elif rota == "rankHidrometros/":
+                retorno = api.GET_rankHidro(dadosJson['quantidade'])
+                client.publish("nuvem", f"POST - 200 - nevoa/{numeroNevoa} - rankHidrometros/ - {retorno}", 1, False)
+            elif rota == "media/":
+                retorno = api.GET_media()
+                client.publish("nuvem", f"POST - 200 - nevoa/{numeroNevoa} - media/ - {retorno}", 1, False)
+                
         elif verboHTTP == "POST":  
             # Login Hidrometro 
             if rota == "loginHidrometro/":
@@ -111,15 +121,16 @@ while True:
                 retorno = api.PUT_Pagarconta(dadosJson['matricula'])
                 client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - contaPaga/ - {retorno}", 1, False)
                 client.publish(f"hidrometro/{dadosJson['matricula']}", f"GET - 200 - nevoa/{numeroNevoa} - desbloquearHidrometro/ - {retorno}", 1, False)
-        elif verboHTTP == "PUT":
             # Colocar dados do hidrometro
-            if rota == "dadosHidrometro/": 
+            elif rota == "dadosHidrometro/": 
                 retorno = api.PUT_novoConsumo(dadosJson['matricula'], dadosJson['consumo'], dadosJson['vazamento'])
                 client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - dadosHidrometro/ - {retorno}", 1, False)
-            # Adm bloquear hidrometro
-            elif rota == "bloquearHidrometro/": 
+            
+        elif verboHTTP == "PUT":
+           # Adm bloquear hidrometro
+            if rota == "bloquearHidrometro/": 
                 retorno = api.PUT_bloquear_hidrometro(dadosJson['matricula'])
-                client.publish(remetente, f"GET - 200 - nevoa/{numeroNevoa} - bloquearHidro/ - {retorno}", 1, False)
+                client.publish("adm", f"GET - 200 - nevoa/{numeroNevoa} - bloquearHidro/ - {retorno}", 1, False)
                 client.publish(f"hidrometro/{dadosJson['matricula']}", f"GET - 200 - nevoa/{numeroNevoa} - bloquearHidrometro/ - {retorno}", 1, False)
             
         lista_de_requisições.pop(0)

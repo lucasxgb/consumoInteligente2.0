@@ -47,8 +47,8 @@ class Api:
                 json.dump(hidrometros, database, indent=4)   
 
             # Retornar 
-            retorno = '"login" : "sucesso","consumoAtual" : "0", "bloqueado" : "0"}'  # Consumo atual é 0, pois não foi criado agora
-            return json.dumps(retorno) # Retornar validação existente e quanto o hidrometro consumiu até o momento
+            retorno = '{"login" : "sucesso", "consumoAtual" : "0", "bloqueado" : "0"}'  # Consumo atual é 0, pois não foi criado agora
+            return retorno # Retornar validação existente e quanto o hidrometro consumiu até o momento
     
 
     def POST_LoginCliente(self, matricula):
@@ -63,7 +63,7 @@ class Api:
 
         reultado = self.POST_LoginHidrometro(matricula)
 
-        return json.dumps('{"login": "sucesso"}')
+        return '{"login": "sucesso"}'
 
 
     # Metodos ADM
@@ -92,11 +92,11 @@ class Api:
                 #Salvar alterações no banco
                 with open("banco/bancoNevoa.json", 'w' , encoding='utf-8') as database:
                     json.dump(hidrometros, database, indent=4)  
-                return json.dumps('{"resultado" : "bloqueado" }')
+                return '{"resultado" : "bloqueado" }'
             else:
-                return json.dumps('{ "resultado" : "inexistente" }')
+                return '{ "resultado" : "inexistente" }'
         except:
-            return json.dumps('{ "resultado" : "bloqueado" }')
+            return '{ "resultado" : "bloqueado" }'
 
 
     def PUT_DesbloquearHidrometro(self, matricula):
@@ -123,11 +123,11 @@ class Api:
                 #Salvar alterações no banco
                 with open("banco/bancoNevoa.json", 'w' , encoding='utf-8') as database:
                     json.dump(hidrometros, database, indent=4)  
-                return json.dumps('{"resultado" : "bloqueado" }')
+                return '{"resultado" : "bloqueado" }'
             else:
-                return json.dumps('{ "resultado" : "inexistente" }')
+                return '{ "resultado" : "inexistente" }'
         except:
-            return json.dumps('{ "resultado" : "bloqueado" }')
+            return '{ "resultado" : "bloqueado" }'
     
 
     # Metodos Cliente
@@ -178,7 +178,7 @@ class Api:
             consAnt01 = str(hidrometros[matricula.lower()]["consumoAnterior01"])
             
             metrosCubicosGastos =  int(consAtu) - int(consAnt01)
-            valorPagar = metrosCubicosGastos * 1.3      # preço de Cada Metro cubico
+            valorPagar = metrosCubicosGastos * 0.7      # preço de Cada Metro cubico
             
             hidrometros[matricula.lower()]["contaPagar"] = valorPagar
             
@@ -243,4 +243,51 @@ class Api:
         with open("banco/bancoNevoa.json", 'w' , encoding='utf-8') as database:
             json.dump(hidrometros, database, indent=4)  
         
-        return json.dumps('{"consumo": "atualizado"}')
+        return '{"consumo": "atualizado"}'
+    
+
+    # Metodos Nuvem
+
+    def GET_rankHidro(self, qtd):
+        """ Rota GET para pegar N hidrometros com maior gasto
+
+            Args:
+                qtd (str): quantidade de hidrometros do rank
+            
+            Returns:
+                Json: 
+        """
+        qtd = int(qtd)
+
+        with open("banco/bancoNevoa.json", 'r' , encoding='utf-8') as database:
+            hidrometros = json.load(database)
+        
+        # Fazer uma lista em ordem crescente com os dados do dic
+        dicAuxiliar = {}
+        dicMaiores = {}
+
+        for chave in hidrometros.keys():
+            dicAuxiliar[chave] = hidrometros[chave]['consumoAtual']
+
+        cont = 0
+        for i in sorted(dicAuxiliar, key = dicAuxiliar.get, reverse=True):
+            dicMaiores[i] = dicAuxiliar[i]
+            cont += 1
+            if cont >= qtd:
+                break
+        
+        return json.dumps(dicMaiores)
+    
+    def GET_media(self):
+        media = 0
+        with open("banco/bancoNevoa.json", 'r' , encoding='utf-8') as database:
+            hidrometros = json.load(database)
+
+        cont = 0
+        for chave in hidrometros.keys():
+            cont += 1
+            media += int(hidrometros[chave]['consumoAtual'])
+        
+        media = media / cont
+        retornar = "{-}"
+        return retornar.replace("-", f'"media" : "{media}"')

@@ -111,7 +111,7 @@ sleep(2.5)
 dadosLogin = lista_de_requisições[0]
 lista_de_requisições.pop(0)
 
-if json.loads(json.loads(dadosLogin['json']))['login'] == "sucesso":
+if json.loads(dadosLogin['json'])['login'] == "sucesso":
     while True:
         # Ficar esperando as mensagens chegar, e verificar - Chamar API dependendo do que veio
         # Mostrar mensagem que chegou na lista

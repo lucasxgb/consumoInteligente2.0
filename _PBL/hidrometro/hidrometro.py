@@ -81,6 +81,7 @@ def nevoaConectar(matricula):
 vazao = 0
 consumo = 0
 bloqueado = 0
+media = 0
 
 broker = 'broker.hivemq.com'
 port = 3000
@@ -97,6 +98,8 @@ client.loop_start()
 
 # Topicos ouvindo
 client.subscribe(f"hidrometro/{matricula}")
+client.subscribe("hidrometros")
+
 
 client.on_connect = on_connect
 client.on_message = on_message
@@ -125,6 +128,7 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
             status = dados_requisicao["status"]
             remetente = dados_requisicao["remetente"]
             rota = dados_requisicao["rota"]
+            #print(dados_requisicao["json"])
             dadosJson = json.loads(dados_requisicao["json"])
             
             #print(f"metodo : {verboHTTP}, status : {status} , remetente : {remetente}, rota : {rota}, json : {dadosJson}")
@@ -135,15 +139,22 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
                 bloqueado = True
             elif rota == "desbloquearHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
                 bloqueado = False
+            elif rota == "media/":
+                print(dadosJson)
+                media = float(dadosJson['media'])
             lista_de_requisições.pop(0)
         
-        sleep(2.5)
+        sleep(2.5) 
+        
+        #print(f"Media: {media}")
+        if consumo <= media:
+            if bloqueado == False:
+                vazao = alterarVazao(vazao)
+                consumo += vazao
+            else:
+                vazao = 0
 
-        if bloqueado == False:
-            vazao = alterarVazao(vazao)
-            consumo += vazao
-            
-        criarJson = '{"consumo" : "2", "matricula" : "3", "vazamento" : "4"}'.replace("2",str(consumo)).replace("3",str(matricula)).replace("4",str(vazao))
+        criarJson = '{"consumo" : "-", "matricula" : "_", "vazamento" : "|"}'.replace("-",str(consumo)).replace("_",str(matricula)).replace("|",str(vazao))
         client.publish(nevoa_se_conectar, f"POST - 200 - hidrometro/{matricula} - dadosHidrometro/ - {criarJson}", 1, False)
 
 client.loop_stop()

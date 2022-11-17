@@ -1,9 +1,199 @@
 {
     "1": {
+        "bloqueado": "0",
+        "consumoAtual": "82",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "2": {
+        "bloqueado": "0",
+        "consumoAtual": "40",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "3": {
+        "bloqueado": "1",
+        "consumoAtual": "55",
+        "consumoAnterior01": "50",
+        "consumoAnterior02": "30",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "4": {
+        "bloqueado": "0",
+        "consumoAtual": "10",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "5": {
+        "bloqueado": "1",
+        "consumoAtual": "70",
+        "consumoAnterior01": "50",
+        "consumoAnterior02": "30",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "6": {
+        "bloqueado": "0",
+        "consumoAtual": "20",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "7": {
+        "bloqueado": "1",
+        "consumoAtual": "90",
+        "consumoAnterior01": "50",
+        "consumoAnterior02": "30",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "8": {
+        "bloqueado": "0",
+        "consumoAtual": "0",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "9": {
+        "bloqueado": "1",
+        "consumoAtual": "25",
+        "consumoAnterior01": "50",
+        "consumoAnterior02": "30",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "10": {
+        "bloqueado": "0",
+        "consumoAtual": "0",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "11": {
+        "bloqueado": "1",
+        "consumoAtual": "1",
+        "consumoAnterior01": "50",
+        "consumoAnterior02": "30",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "1"
+    },
+    "12": {
+        "bloqueado": "0",
+        "consumoAtual": "0",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "13": {
         "bloqueado": "1",
         "consumoAtual": "50",
         "consumoAnterior01": "50",
         "consumoAnterior02": "30",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "14": {
+        "bloqueado": "0",
+        "consumoAtual": "32",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "15": {
+        "bloqueado": "1",
+        "consumoAtual": "50",
+        "consumoAnterior01": "50",
+        "consumoAnterior02": "30",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "16": {
+        "bloqueado": "0",
+        "consumoAtual": "0",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "17": {
+        "bloqueado": "1",
+        "consumoAtual": "50",
+        "consumoAnterior01": "50",
+        "consumoAnterior02": "30",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "18": {
+        "bloqueado": "0",
+        "consumoAtual": "0",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "19": {
+        "bloqueado": "1",
+        "consumoAtual": "50",
+        "consumoAnterior01": "50",
+        "consumoAnterior02": "30",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    },
+    "20": {
+        "bloqueado": "0",
+        "consumoAtual": "0",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
         "consumoAnterior03": "0",
         "consumoAnterior04": "0",
         "contaPagar": "0",

@@ -33,23 +33,10 @@ def on_message(client, userdata, msg):
     lista_de_requisições.append(dic)
 
 
-def nevoaConectar(matricula):
-    if matricula > 0 and matricula <= 100:
-        return "nevoa/1"
-    elif matricula > 100 and matricula <= 200:
-        return "nevoa/2"
-    elif matricula > 200 and matricula <= 300:
-        return "nevoa/3"
-    elif matricula > 300 and matricula <= 400:
-        return "nevoa/4"
-    elif matricula > 400 and matricula <= 500:
-        return "nevoa/5"
-
-
 def menuAux():
     print('=' * 10, '{Bem vindo}', '=' * 10)
     print('''Selecione a opção desejada
-           [1] - VER OS 10 HIDROMETROS COM MAIOR GASTO
+           [1] - VER OS N HIDROMETROS COM MAIOR GASTO
            [2] - PEGAR DADOS DE HIDROMETRO ESPECIFICO
            [3] - BLOQUEAR HIDROMETRO
            ''')
@@ -62,17 +49,17 @@ def menu(client, nuvem_se_conectar):
     escolha = menuAux()
     criarJson = '{"" : ""}'
     if escolha == 1:
+        qtd = int(input("Digite a quantidade de hidrometros: "))
+        criarJson = '{"quantidade" : "-"}'.replace("-", str(qtd))
         client.publish(nuvem_se_conectar, f"GET - 200 - adm - rankHidrometros/ - {criarJson}", 1, False)
-    elif escolha == 2:
+    elif escolha == 2: # Mandar para a nuvem, a nnuvem mandar para a nevoa e a nevoa mandar para o ADM
         matricula = int(input("Digite a matricula do Hidrometro: "))
         criarJson = '{"matricula" : "-"}'.replace("-", str(matricula))
-        nevoa = nevoaConectar(matricula)
-        client.publish(nevoa, f"GET - 200 - adm - hidrometroEspecifico/ - {criarJson}", 1, False)
+        client.publish(nuvem_se_conectar, f"GET - 200 - adm - hidrometroEspecifico/ - {criarJson}", 1, False)
     elif escolha == 3:
         matricula = int(input("Digite a matricula do Hidrometro: "))
         criarJson = '{"matricula" : "-"}'.replace("-", str(matricula))
-        nevoa = nevoaConectar(matricula)
-        client.publish(nevoa, f"PUT - 200 - adm - bloquearHidrometro/ - {criarJson}", 1, False)
+        client.publish(nuvem_se_conectar, f"PUT - 200 - adm - bloquearHidrometro/ - {criarJson}", 1, False)
 
 
 broker = 'broker.hivemq.com'
@@ -129,6 +116,14 @@ while True:
         elif rota == "bloquearHidro/": # Gerar Conta -> Referente a rota 03
             informacoesHidro = json.loads(dadosJson)
             print(informacoesHidro)
+        
+        elif rota == "rankHidrometros/":
+            dadosJson =  json.loads(dadosJson)
+            print("\n\n")
+            for chave in dadosJson.keys():
+                print( f"Matricula: {chave}      Quantidade Gasta: {dadosJson[chave]}")
+            print("\n\n")
+            
 
         lista_de_requisições.pop(0)
     menu(client, nuvem_se_conectar)
