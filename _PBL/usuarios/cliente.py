@@ -123,12 +123,12 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
             # Vericar os dados recebidos e mostrar em tela mensagens.
 
             if rota == "dadosHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
-                dadosJson = json.loads(dadosJson)["1"]
+                dadosJson = json.loads(dadosJson)
                 informacoesHidro = dadosJson
                 print(f"\n\nConsumo :  {informacoesHidro['consumoAtual']}")
                 print(f"Vazamento :  {informacoesHidro['vazamento']}\n\n")
             elif rota == "historicoHidrometro/": # Historico do Hidrometro -> Referente a rota 02
-                dadosJson = json.loads(dadosJson)["1"]
+                dadosJson = json.loads(dadosJson)
                 informacoesHidro = dadosJson
                 print("\n\nUltimas 5 informações do Hidrometro")
                 print(f" Consumo Atual :  {informacoesHidro['consumoAtual']} M³")

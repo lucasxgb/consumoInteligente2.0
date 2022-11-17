@@ -105,7 +105,7 @@ while True:
             # Pegar dados de hidrometro especifico
             if rota == "bloquearHidrometro/": 
                 nevoa = obterNevoa(int(dadosJson['matricula']))
-                client.publish(nevoa, f"GET - 200 - nuvem - bloquearHidrometro/ - {json.dumps(dadosJson)}", 1, False)
+                client.publish(nevoa, f"PUT - 200 - nuvem - bloquearHidrometro/ - {json.dumps(dadosJson)}", 1, False)
         elif verboHTTP == "POST":
             if rota == "rankHidrometros/":
                 sleep(1)

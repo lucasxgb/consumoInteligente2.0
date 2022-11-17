@@ -132,8 +132,10 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
 
             if rota == "bloquearHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
                 bloqueado = True
+                vazao = -1
             elif rota == "desbloquearHidrometro/":  # Dados do Hidrometro -> Referente a rota 01
                 bloqueado = False
+                vazao = 1
             elif rota == "media/":
                 media = float(dadosJson['media'])
             lista_de_requisições.pop(0)
@@ -145,11 +147,11 @@ if json.loads(dadosLogin['json'])['login'] == "sucesso":
                 vazao = alterarVazao(vazao)
                 consumo += vazao
             else:
-                vazao = 0
+                vazao = -1
         
         vazamento = 0
 
-        if vazao == 0:
+        if vazao == -1 and bloqueado == False:
             vazamento = 1
 
         criarJson = '{"consumo" : "-", "matricula" : "_", "vazamento" : "|"}'.replace("-",str(consumo)).replace("_",str(matricula)).replace("|",str(vazamento))

@@ -97,13 +97,14 @@ while True:
             
         elif rota == "hidroEspecifico/": # Historico do Hidrometro -> Referente a rota 02
             informacoesHidro = json.loads(dadosJson)
-            print(f"\n\nConsumo: {informacoesHidro['1']['consumoAtual']} M³")
-            print(f"Devendo: {informacoesHidro['1']['contaPagar']} R$")
-            if informacoesHidro['1']['vazamento'] == "0":
+
+            print(f"\n\nConsumo: {informacoesHidro['consumoAtual']} M³")
+            print(f"Devendo: {informacoesHidro['contaPagar']} R$")
+            if informacoesHidro['vazamento'] == "0":
                 print("Vazamento: Não tem")
             else:
                 print("Vazamento: Existente")
-            if informacoesHidro['1']['bloqueado'] == "0":
+            if informacoesHidro['bloqueado'] == "0":
                 print("Bloqueado: Não\n\n")
             else:
                 print("Bloqueado: Sim\n\n")

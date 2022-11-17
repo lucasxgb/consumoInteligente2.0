@@ -146,7 +146,7 @@ class Api:
         with open("banco/bancoNevoa.json", 'r' , encoding='utf-8') as database:
             hidrometros = json.load(database)
         
-        return json.dumps(hidrometros)
+        return json.dumps(hidrometros[str(matricula)])
 
 
     def GET_GerarBoleto(self, matricula):

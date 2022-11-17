@@ -1,3 +1,22 @@
 {
-    
+    "13": {
+        "bloqueado": "0",
+        "consumoAtual": "53",
+        "consumoAnterior01": "53",
+        "consumoAnterior02": "53",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": 0.0,
+        "vazamento": "0"
+    },
+    "1": {
+        "bloqueado": "0",
+        "consumoAtual": "56",
+        "consumoAnterior01": "0",
+        "consumoAnterior02": "0",
+        "consumoAnterior03": "0",
+        "consumoAnterior04": "0",
+        "contaPagar": "0",
+        "vazamento": "0"
+    }
 }
