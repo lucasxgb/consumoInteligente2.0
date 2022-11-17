@@ -24,10 +24,16 @@
 		- Código de Lucas - [ConsumoInteligente](https://github.com/lucasxgb/consumoInteligente 'Lucas'),	
 		- Código de Silas - [redeControleAgua](https://github.com/silas-silva/rede_controle_agua_SOCKET 'Silas')
 
-- Foi solicitado a nós da equipe de desenvolvimento a continuação desse trabalho, agora porém é necessário a mudança para um modelo de servidor descentralizado,no qual os computadores conectados ao sitema funcionam também como servidores (Infomoney 2022). Onde ao invés de realizar todo processamento de informações na nuvem ou servidor principal, as informações de menor prioridade, ou que não exigem conhecimento de todos os dados do sitema sempre serão tratados na névoa que está mais próxima ao usuário.
+- Foi solicitado a nós da equipe de desenvolvimento a continuação desse trabalho, agora sendo necessário a mudança para um modelo de servidor descentralizado,no qual os computadores conectados ao sitema funcionam também como servidores (Infomoney 2022). Onde ao invés de realizar todo processamento de informações na nuvem ou servidor principal, as informações de menor prioridade, ou que não exigem conhecimento de todos os dados do sitema sempre serão tratados na névoa que está mais próxima ao usuário.
 	
-## Metodologia
-`Funcionalidade 1`: descrição da funcionalidade 1
+## Arquitetura do sistema.
+- O sistema é constituido pelas seguintes partes:
+	- `Funcionalidade 1`
+	- `Funcionalidade 2`
+	- `Funcionalidade 3`
+	- `Funcionalidade 4`
+- Detalhes da implementação serão abordados na proxíma secção
+
 
 ## Resultados
 
