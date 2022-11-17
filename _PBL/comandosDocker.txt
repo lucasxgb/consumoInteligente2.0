@@ -17,6 +17,7 @@ docker pull eclipse-mosquitto
         docker build --rm -t lucasxgb/mosquitto-image:v1 -f Dockerfile .
         docker run -it -t -p 3000:3000 --name mosquitto-container lucasxgb/mosquitto-image:v1
         sudo mosquitto -c config/mosquitto.conf
+        sudo mosquitto -d -c config/mosquitto.conf
         
         # buildar a imagem dos negocios 
          docker build --rm -t lucasxgb/mosquitto-image:v1 -f Dockerfile .
