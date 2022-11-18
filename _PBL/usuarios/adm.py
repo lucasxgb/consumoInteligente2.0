@@ -1,4 +1,4 @@
-# Cliente
+# Adm finalizado
 
 import paho.mqtt.client as mqtt
 import json

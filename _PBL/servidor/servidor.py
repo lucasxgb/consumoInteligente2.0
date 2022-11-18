@@ -1,4 +1,4 @@
-# Nuvem
+# Nuvem finalizada
 import paho.mqtt.client as mqtt
 import json
 from threading import Thread
