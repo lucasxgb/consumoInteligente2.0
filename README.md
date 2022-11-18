@@ -27,6 +27,7 @@
 - Foi solicitado a nós da equipe de desenvolvimento a continuação desse trabalho, agora sendo necessário a mudança para um modelo de servidor descentralizado,no qual os computadores conectados ao sitema funcionam também como servidores (Infomoney 2022). Onde ao invés de realizar todo processamento de informações na nuvem ou servidor principal, as informações de menor prioridade, ou que não exigem conhecimento de todos os dados do sitema sempre serão tratados na névoa que está mais próxima ao usuário.
 	
 ## Arquitetura do sistema:
+(https://github.com/lucasxgb/consumoInteligente2.0/blob/main/_PBL/imagens/Hidrometro.jpg)
 - O sistema é constituido pelas seguintes partes:
 	- `Funcionalidade 1`
 	- `Funcionalidade 2`
